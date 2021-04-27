@@ -1,0 +1,41 @@
+#formulario{
+  background-color: #c8d2d2;
+  box-shadow: #aaaaaa 0 0 5px 6px;
+  margin-left: 20%;
+  margin-right: 20%;
+  margin-top: 2%;
+  padding: 2.5em;
+  border-radius: 1.5em;
+}
+
+.dato{
+  margin-bottom: 1em;
+	margin-left: 1em;
+}
+
+.leyenda {
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+	font-size: 1.2em;
+	font-weight: 500;
+}
+
+.avis-img {
+	width: 320px;
+	height: 240px;
+	
+}
+
+.complete-img{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+	height: 600px;
+}
+
+
+
+
+

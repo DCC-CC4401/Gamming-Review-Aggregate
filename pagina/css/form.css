@@ -1,0 +1,56 @@
+#formulario{
+  background-color: #c8d2d2;
+  box-shadow: #aaaaaa 0 0 5px 6px;
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 2%;
+  padding: 2.5em;
+  border-radius: 1.5em;
+	text-align: left;
+}
+
+.entrada {
+  margin-bottom: 1em;
+	margin-left: 3em;
+	margin-right: 2em;
+}
+
+.leyenda {
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+}
+
+textarea, input, select{
+  padding: 0.1em;
+  border-radius: 0.5em;
+  width: 50%;
+}
+
+.button-pic {
+	margin-left: 27%;
+	font-size: 0.7em;
+	padding: 0;
+}
+
+.submit {
+	width: 30%;
+	margin-left: 35%;
+}
+@media(max-width:700px){
+	.leyenda {
+		display: block;
+		width: 25%;
+	}
+	textarea, input, select{
+		padding: 0.1em;
+		border-radius: 0.5em;
+		width: 60%;
+	}
+	.button-pic {
+		margin-left: 0;
+		font-size: 0.4em;
+		padding: 0;
+	}
+}
+

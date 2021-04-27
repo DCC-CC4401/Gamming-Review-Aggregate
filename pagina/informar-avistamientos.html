@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>OCUAIM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/form.css">
+		<script src="js/validame.js"></script>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="container">
+				<h1 class="header-heading">OCUIAM</h1>
+        <h2>Observatorio Chileno Urbano de Insectos, Arácnidos y Miriápodos</h2>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <div class="container">
+        <ul class="nav">
+          <li><a href="index.html">Volver al inicio</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="container">
+        <h3>Informar Avistamiento</h3>
+
+        <div id="formulario">
+          <h3 class="center"> Formulario de avistamiento </h3>
+
+          <form action="" method="post" onsubmit="return validation()">
+
+            <!-- Input del nombre -->
+            <h4> Lugar </h4>
+            <div class="entrada">
+              <div class="leyenda">Región</div>
+							<select id="region" name="region" onchange="comunas()">
+              </select>
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda">Comuna</div>
+              <select id="comuna" name="comuna"  >
+              </select>
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda" >Sector</div>
+              <input type="text" id="sector" name="sector" size=200 placeholder= "Ingrese el nombre del sector">
+            </div>
+
+            <h4> Datos de contacto</h4>
+            <div class="entrada">
+              <div class="leyenda" >Nombre</div>
+
+              <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su nombre">
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda" >Email</div>
+
+              <input type="text" id="email" name="email" size=10 placeholder= "Ingrese su email">
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda" >Número de celular</div>
+              <input type="text" id="celular" name="celular" size=15 placeholder= "Ingrese su telefono">
+            </div>
+
+						<div id ="avistamientos"></div>
+
+						<div class="entrada">
+							<button class ="button-pic" type="button" onclick="insertInputFile()">Agregar otra foto</button>
+						</div>
+
+            <!-- Botón de envío-->
+						<div class="entrada">            
+							<button  type="button" onclick="insertNewA()">Agregar otro avistamiento</button>
+						</div>
+
+            <!-- Botón de envío-->
+						<div class="entrada">            
+							<button  type="submit" onclick="validation()">Enviar información de avistamientos</button>
+						</div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+		<script src="js/chile.js"></script>
+		<script src="js/insert.js"></script>
+  </body>
+  
+</html>
