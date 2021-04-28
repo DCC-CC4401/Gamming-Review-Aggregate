@@ -77,22 +77,21 @@ Layout styles
   color: rgb(250,250,250);
   background: rgba(100,100,200,1);
   position: fixed;
-  padding: 0.8em;
+  padding: 0em;
 }
 
 .nav{
-  max-width: 1000px;
-  width: auto !important;
-  margin: auto;
+  width: auto;
+  margin: 0;
+  display: flex;
+  justify-content: center;
 }
-
 
 .nav li{
   display: inline;
   margin: auto;
   padding: 1em;
 }
-
 
 .nav a{
   display: inline;
@@ -118,33 +117,38 @@ Layout styles
 }
 
 #search{
-  width:auto;
+  width:70%;
 }
 
 /*
  * Page content
  */
-.container{
-	max-width: 100%;
-	margin: 0 auto;
-}
 
 .content {
-	padding: 1em 1.25em;
-  margin-top: 4em;
+  margin-top: 4.1em;
+  width:100%;
+  overflow: hidden;
+}
+
+
+.container{
+  width: 95%;
+	margin: 3% auto;
+  display: flex;
+  justify-content: center;
 }
 
 .main{
-  float: left;
   width: 65%;
   margin-right: 5%;
   margin-bottom: 1em;
+  padding: 1em;
 }
 
 .aside{
-  float: left;
-  width: 30%;
+  width: 25%;
   margin-bottom: 1em;
+  padding: 1em;
 }
 
 
@@ -162,15 +166,15 @@ Wide styles
 
 @media (max-width: 830px){
   .nav-bar{
-    font-size: 0.8em;
+    font-size: 1em;
+  }
+  .nav{
+    display: block;
   }
 
   .nav li{
     display: block;
     padding: 0.2em;
-  }
-
-  .nav a{
   }
 
   .nav form {
@@ -179,25 +183,22 @@ Wide styles
   }
 
   #search{
-    width: 50%;
-    
+    width: 40%;
   }
 
   .content {
     padding: 1em 1.25em;
     margin-top: 9em;
   }
-
-  .main {
-    margin-bottom: 1em;
-    float: none;
+  .container{
+    display:block;
+  }
+  .main{
+    width: auto;
+  }
+  .aside{
     width: auto;
   }
 
-  .aside {
-    margin-bottom: 1em;
-    float: none;
-    width: auto;
-  }
 }
 

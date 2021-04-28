@@ -11,6 +11,19 @@
   padding: 1em;
 }
 
+.responsive-img{
+  height: auto;
+  width: 100%;
+  max-width: 600px;
+  min-width: 160px;
+}
+
+.reviews{
+  width: 100%
+}
+
+
+
 
 .formulario {
   background-color: rgba(100,100,100,0.1);
