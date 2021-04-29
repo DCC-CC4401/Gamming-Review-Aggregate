@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Proyecto de Ingeniería de Software - Grupo 6
 
 ## Branches
