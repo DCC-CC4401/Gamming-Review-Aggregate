@@ -1,5 +1,10 @@
 # Proyecto de Ingeniería de Software - Grupo 6
 
+## Branches
+- main
+- static-page
+- develop
+
 ## Authors
 - **Alexander Walmsley** - [AlexanderWalmsley](https://github.com/AlexanderWalmsley)
 - **Esteban Courard Christie**
