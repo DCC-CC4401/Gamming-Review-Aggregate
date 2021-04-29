@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>GRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../static/css/style.css">
+    <link rel="stylesheet" href="../../static/css/form.css">
+  </head>
+
+  <body>
+    <div class="nav-bar">
+      <ul class="nav">
+        <li><a href="home">Simbolo</a></li>
+        <li><a href="popular_games">Popular Games</a></li>
+        <li><a href="popular_games">Features</a></li>
+        <li><form action=''  id='search-form' method='get'>
+            <input id="search" name='q' placeholder='Ingresa un nombre' type='text'/>
+            <input id='button-submit' type='submit' value='Search'/>
+          </form>
+        </li>
+        <li><a href="login">Login</a></li>
+      </ul>
+    </div>
+
+
+    <div class="content">
+      <div class="container">
+        <div class="main">
+          <p>¿Tienes una cuenta? Conéctate con tu cuenta</p>
+
+          <h3>Login</h3>
+          <div class="formulario">
+            <form action="" method="post" onsubmit="return validation()">
+              <div class="entrada">
+                <div class="leyenda" >Usuario</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
+              </div>
+              <div class="entrada">
+                <div class="leyenda" >Contraseña</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
+              </div>
+
+              <!-- Botón de envío-->
+              <div class="entrada">
+                <button  type="submit" onclick="validation()">Conectarse</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="aside">
+          <p>¿No tienes un cuenta? Crea una cuenta</p>
+
+          <h3>Creación de cuenta</h3>
+          <div class="formulario">
+            <form action="" method="post" onsubmit="return validation()">
+              <div class="entrada">
+                <div class="leyenda" >Nombre de usuario</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
+              </div>
+              <div class="entrada">
+                <div class="leyenda" >Escribe una constraseña</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
+              </div>
+
+              <div class="entrada">
+                <div class="leyenda" >Vuelve a escrbir tu contraseña</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
+              </div>
+
+              <!-- Botón de envío-->
+              <div class="entrada">
+                <button  type="submit" onclick="validation()">Crear cuenta</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </body>
+
+</html>
