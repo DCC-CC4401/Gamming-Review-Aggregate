@@ -1,0 +1,68 @@
+.main{
+  width: 45%;
+  margin-right: 5%;
+  margin-bottom: 1em;
+  padding: 1em;
+}
+
+.aside{
+  width: 45%;
+  margin-bottom: 1em;
+  padding: 1em;
+}
+
+
+.formulario {
+  background-color: rgba(100,100,100,0.1);
+  box-shadow: rgba(0,0,0,0.1) 0 0 5px 6px;
+  padding: 1.5em;
+  border-radius: 1.5em;
+	text-align: left;
+}
+
+.entrada {
+  margin-bottom: 1em;
+	margin-left: 3em;
+	margin-right: 2em;
+}
+
+.leyenda {
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+}
+
+.formulario input{
+  padding: 0.1em;
+  border-radius: 0.5em;
+  width: 50%;
+}
+.submit {
+	width: 30%;
+	margin-left: 35%;
+}
+
+@media (max-width: 830px){
+  .main {
+    margin-bottom: 1em;
+    width: auto;
+  }
+
+  .aside {
+    margin-bottom: 1em;
+    width: auto;
+  }
+}
+
+@media(max-width:700px){
+	.leyenda {
+		display: block;
+		width: 25%;
+	}
+	.formulario input{
+		padding: 0.1em;
+		border-radius: 0.5em;
+		width: 60%;
+	}
+}
+
