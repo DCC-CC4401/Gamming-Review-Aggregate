@@ -107,7 +107,7 @@ Layout styles
 }
 
 .nav form {
-  display: inline;
+  display: inline-flex;
   margin: auto;
 }
 
@@ -117,7 +117,7 @@ Layout styles
 }
 
 #search{
-  width:50%;
+  width:40%;
 }
 
 /*
