@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <title>GRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/agregar-juego.css">
+  </head>
+
+  <body>
+    <div class="nav-bar">
+      <ul class="nav">
+        <li><a href="index.html">Simbolo</a></li>
+        <li><a href="popular-games.html">Listados</a></li>
+        <li><a href="agregar-juego.html">Agregar juego</a></li>
+        <li><form action=''  id='search-form' method='get'>
+            <input id="search" name='search' placeholder='Ingresa un nombre' type='text'/>
+            <input id='button-submit' type='submit' value='Buscar'/>
+          </form>
+        </li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </div>
+
+    <div class="content">
+      <div class="container">
+        <div class="main">
+          <p>¿No encontaste tu juego favorito? ¡Agrégalo a la página!</p>
+          <h3>Agregar juego nuevo</h3>
+          <div class="formulario">
+            <form action="" method="post" >
+              <div class="entrada">
+                <div class="leyenda" >Nombre del juego</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
+              </div>
+
+              <div class="entrada">
+                <div class="leyenda" >Nombre del juego</div>
+                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
+              </div>
+
+              <div class="entrada">
+                <div class="leyenda" >Año de lanzamiento</div>
+                <input type="number" id="anio" name="anio" size=100 value= "2021" >
+              </div>
+
+              <!-- Botón de envío-->
+              <div class="entrada">            
+                <button  type="submit">Agregar juego</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+</html>
