@@ -33,13 +33,14 @@
           <h3>Login</h3>
           <div class="formulario">
             <form action="" method="post" onsubmit="return validation()">
+              {% csrf_token %}
               <div class="entrada">
                 <div class="leyenda" >Usuario</div>
                 <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
               </div>
               <div class="entrada">
-                <div class="leyenda" >Contraseña</div>
-                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
+                <div class="leyenda" >passworda</div>
+                <input type="text" id="passworda" name="passworda" size=100 placeholder= "Ingrese su passworda">
               </div>
 
               <!-- Botón de envío-->
@@ -56,18 +57,14 @@
           <h3>Creación de cuenta</h3>
           <div class="formulario">
             <form action="" method="post" onsubmit="return validation()">
+              {% csrf_token %}
               <div class="entrada">
                 <div class="leyenda" >Nombre de usuario</div>
                 <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
               </div>
               <div class="entrada">
-                <div class="leyenda" >Escribe una constraseña</div>
-                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
-              </div>
-
-              <div class="entrada">
-                <div class="leyenda" >Vuelve a escrbir tu contraseña</div>
-                <input type="text" id="nombre" name="nombre" size=100 placeholder= "Ingrese su contraseña">
+                <div class="leyenda" >Escribe una password</div>
+                <input type="text" id="password" name="password" size=100 placeholder= "Ingrese su password">
               </div>
 
               <!-- Botón de envío-->
