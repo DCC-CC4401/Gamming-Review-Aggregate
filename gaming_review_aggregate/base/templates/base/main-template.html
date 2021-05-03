@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>GRA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../../static/css/style.css">
+
+    {% block head %} {% endblock %}
+    
+  </head>
+
+  <body>
+    <div class="nav-bar">
+      <ul class="nav">
+        <li>
+          <a href="/home">
+            <button class="main-link" type="button">Inicio</button> 
+          </a>
+        </li>
+        <li>
+          <a href="/popular_games">
+            <button class="main-link" type="button"> Listados </button> 
+          </a>
+        </li>
+        <li>
+          <a href="/add_game">
+            <button class="main-link" type="button"> Agregar Juego </button> 
+          </a>
+        </li>
+        <li><form action='/nombre-buscado/'  id='search-form' method='get'>
+            <input id="search" name='search' placeholder='Ingresa un nombre' type='text'/>
+            <input id='button-submit' type='submit' value='Buscar'/>
+          </form>
+        </li>
+        <li>
+          <a href="/login">
+            <button class="main-link" type="button"> Login </button> 
+          </a></li>
+      </ul>
+    </div>
+
+    {% block content %} {% endblock %}
+    
+  </div>
+
+  </body>
+</html>

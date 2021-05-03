@@ -1,0 +1,65 @@
+{% extends "base/main-template.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../../static/css/form.css">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="main">
+      <p>¿Tienes una cuenta? Conéctate con tu cuenta</p>
+
+      <h3>Login</h3>
+      <div class="formulario">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="entrada">
+            <div class="leyenda" >Usuario</div>
+            <input type="text" id="user" name="user" size=100 placeholder= "Ingrese su usuario">
+          </div>
+          <div class="entrada">
+            <div class="leyenda" >Contraseña</div>
+            <input type="password" id="passw" name="passw" size=100 placeholder= "Ingrese su contraseña">
+          </div>
+
+          <!-- Botón de envío-->
+          <div class="entrada">
+            <button class="main-button" type="submit">Conectarse</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+
+    <div class="aside">
+      <p>¿No tienes un cuenta? Crea una cuenta</p>
+
+      <h3>Creación de cuenta</h3>
+      <div class="formulario">
+        <form action="cuenta-creada/" method="post">
+          {% csrf_token %}
+          <div class="entrada">
+            <div class="leyenda" >Nombre de usuario</div>
+            <input type="text" id="new-user" name="new-user" size=100 placeholder= "Ingrese su usuario">
+          </div>
+          <div class="entrada">
+            <div class="leyenda" >Escribe una constraseña</div>
+            <input type="password" id="new-passw1" name="new-passw1" size=100 placeholder= "Ingrese su contraseña">
+          </div>
+
+          <div class="entrada">
+            <div class="leyenda" >Vuelve a escrbir tu contraseña</div>
+            <input type="password" id="new-passw2" name="new-passw2" size=100 placeholder= "Ingrese su contraseña">
+          </div>
+
+          <!-- Botón de envío-->
+          <div class="entrada">
+            <button class="main-button" type="submit">Crear cuenta</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
