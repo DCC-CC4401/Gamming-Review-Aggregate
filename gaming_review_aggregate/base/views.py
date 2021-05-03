@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 
-from base.models import User 
+from base.models import User, Game
 
 plataforms = ["Android", "Arcade", "Atari",
         "Game Boy", "Game Boy Advance", "Game Boy Color",
@@ -75,6 +75,8 @@ def juegoAgregado(request):
             }
 
     #Acá hay que crear un código que, dado los datos anteriores, agregue a la base de datos el juego:
+    game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat, genero=gen)
+
     if request.method == "POST":
         return render(request, "base/resultados/juego-agregado.html", dic)
 
