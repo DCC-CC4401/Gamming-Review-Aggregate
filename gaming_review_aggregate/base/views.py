@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate
 
 from base.models import User, Game
 
@@ -27,16 +28,16 @@ def login(request): #the login view
     if request.method == "GET":
        return render(request, "base/nav-bar/login.html")
 
-    #elif request.method == 'POST': #Si estamos recibiendo el form de registro
+    elif request.method == 'POST': #Si estamos recibiendo el form de registro
         #Tomar los elementos del formulario que vienen en request.POST
-        #nombre = request.POST['new-user']
-        #contraseña = request.POST['new-passw1']
+        username = request.POST['user']
+        contraseña = request.POST['passw']
 
-        #Crear el nuevo usuario
-        #user = User.objects.create_user(username=nombre, nombre=nombre,password=contraseña)
+        #Autenticar al usuario
+        user = authenticate(username=username, password=contraseña)
 
         #Redireccionar la página /home
-        #return HttpResponseRedirect('/home')
+        return HttpResponseRedirect('/home')
 
 def popular_games(request): # the popular games view
     if request.method == "GET":
