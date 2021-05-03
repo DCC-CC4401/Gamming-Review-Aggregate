@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
 
 from base.models import User, Game
+
+
 
 plataforms = ["Android", "Arcade", "Atari",
         "Game Boy", "Game Boy Advance", "Game Boy Color",
@@ -24,7 +27,7 @@ def home(request): #the homepage view
     if request.method == "GET":
        return render(request, "base/nav-bar/index.html")
 
-def login(request): #the login view
+def user_login(request): #the login view
     if request.method == "GET":
        return render(request, "base/nav-bar/login.html")
 
@@ -34,10 +37,27 @@ def login(request): #the login view
         contraseña = request.POST['passw']
 
         #Autenticar al usuario
-        user = authenticate(username=username, password=contraseña)
+        user = authenticate(username=username, nombre=username, password=contraseña)
 
-        #Redireccionar la página /home
-        return HttpResponseRedirect('/home')
+        if user is not None:
+            #Redireccionar la página /home
+            #login(request, user)
+            if user.is_active:
+                login(request,user)
+                user.last_login = timezone.now()
+                user.save(update_fields=['last_login'])
+                return HttpResponseRedirect('/home')
+            else:
+                return HttpResponseRedirect('/add_game')
+        else:
+            print("invalid login details " + username + " " + contraseña)
+            return HttpResponseRedirect('/login')
+
+def user_logout(request):
+    context = RequestContext(request)
+    logout(request)
+    # Redirect back to index page.
+    return HttpResponseRedirect('/home')
 
 def popular_games(request): # the popular games view
     if request.method == "GET":
@@ -88,7 +108,9 @@ def cuentaCreada(request):
 
     #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
     #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
-    user = User.objects.create_user(username=new_user, password=new_password1)
+    user = User.objects.create_user(username=new_user, nombre=new_user, password=new_password1)
 
     if request.method == "POST":
+        user.last_login = timezone.now()
+        user.save(update_fields=['last_login'])
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})

@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
    nombre = models.CharField(max_length=30, default="user")
-   password = models.CharField(max_length=30)
+   password = models.CharField(max_length=100)
 
 class Game(models.Model):
    nombre = models.CharField(max_length=150)
