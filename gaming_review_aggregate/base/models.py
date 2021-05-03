@@ -16,7 +16,7 @@ class User(AbstractUser):
 
 #class Review(models.Model):
    # body= models.CharField(max_length=5000)
-gamin
+
 #class Genre(models.Model):
     #nombre = models.CharField(max_length=30)
 
