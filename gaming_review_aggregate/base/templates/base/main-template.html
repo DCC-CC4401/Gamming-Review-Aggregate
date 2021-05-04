@@ -33,10 +33,19 @@
             <input id='button-submit' type='submit' value='Buscar'/>
           </form>
         </li>
-        <li>
-          <a href="/login">
-            <button class="main-link" type="button"> Login </button> 
-          </a></li>
+        {% if user.is_authenticated %}
+          <li>
+            <a href="/perfil">
+              <button class="main-link" type="button"> Perfil </button> 
+            </a>
+          </li>
+        {% else %}
+          <li>
+            <a href="/login">
+              <button class="main-link" type="button"> Login </button> 
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </div>
 

@@ -21,6 +21,7 @@ genres = ["Action", "Adventure", "Fighting", "Platform",
         "Puzzle", "Racing", "Role-playing", "Shooter", "Simulation",
         "Sports", "Strategy", "Other"]
 
+games = Game.objects.all()
 
 
 def home(request): #the homepage view
@@ -54,14 +55,13 @@ def user_login(request): #the login view
             return HttpResponseRedirect('/login')
 
 def user_logout(request):
-    context = RequestContext(request)
     logout(request)
     # Redirect back to index page.
-    return HttpResponseRedirect('/home')
+    return render(request, "base/resultados/sesion-cerrada.html")
 
 def popular_games(request): # the popular games view
     if request.method == "GET":
-        return render(request, "base/nav-bar/popular-games.html", {"genres" : genres})
+        return render(request, "base/nav-bar/popular-games.html", {"genres" : genres, "games": games})
 
 def add_game(request): #the add game form view
     if request.method == "GET":
@@ -97,7 +97,7 @@ def juegoAgregado(request):
 
     #Acá hay que crear un código que, dado los datos anteriores, agregue a la base de datos el juego:
     game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat, genero=gen)
-
+    games.update()
     if request.method == "POST":
         return render(request, "base/resultados/juego-agregado.html", dic)
 
@@ -115,7 +115,26 @@ def cuentaCreada(request):
         user.save(update_fields=['last_login'])
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})
 
-
 def perfil(request): #the homepage view
     if request.method == "GET":
-       return render(request, "base/perfil-usuario.html")
+        return render(request, "base/perfil-usuario.html")
+
+    elif request.method == "POST":
+        return render(request, "base/perfil-usuario.html")
+
+def editar_perfil(request): #the homepage view
+    if request.method == "GET":
+        return render(request, "base/editar-perfil.html")
+
+def perfil_actualizado(request):
+    edit_edad = request.POST["edad"]
+    edit_correo = request.POST["correo"]
+    edit_descripcion_usuario = request.POST["descripcion_usuario"]
+
+    usuario = request.user
+    usuario.edad = edit_edad
+    usuario.email = edit_correo
+    usuario.descripcion = edit_descripcion_usuario
+    usuario.save(update_fields=["edad","email","descripcion"])
+    return redirect('perfil/')
+

@@ -10,4 +10,7 @@ urlpatterns = [
   path('juego-agregado/', views.juegoAgregado, name='juego-agregado/'),
   path('cuenta-creada/', views.cuentaCreada, name='cuenta-creada/'),
   path('perfil/', views.perfil, name='perfil/'),
+  path('editar_perfil/', views.editar_perfil, name='editar_perfil/'),
+  path('perfil_actualizado/', views.perfil_actualizado, name='perfil_actualizado/'),
+  path('sesion_cerrada/', views.user_logout, name='sesion_cerrada/'),
 ]

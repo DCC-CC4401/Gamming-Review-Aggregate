@@ -8,64 +8,21 @@
 <div class="content">
   <div class="container">
     <div class="popular-games">
-      <h3> ? Bla Bla Bla Bla</h3>
+      <h3> Lista de Juegos Agregados </h3>
       <table class="table table-striped">
         <tbody>
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla bla bla</h4>
-              <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
+          {% for game in games %}
+            <tr>
+              <td>
+                <p>Nombre: <b>{{game.nombre}}</b></p>
+                <p>Año: <b>{{game.anio}}</b></p>
+                <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
+                <p>Plataforma: <b>{{game.plataforma}}</b></p>
+                <p>Genero: <b>{{game.genero}}</b></p>
+                <p>Descripción: <b>{{game.descripcion}}</b></p>
+              </td>
+            </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
