@@ -3,7 +3,9 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
    nombre = models.CharField(max_length=30, default="user")
-   password = models.CharField(max_length=100)
+   password = models.CharField(blank=False,max_length=100)
+   edad = models.IntegerField(null=True)
+   descripcion = models.TextField(max_length=2000, default="Acá va la descripción de usuario")
 
 class Game(models.Model):
    nombre = models.CharField(max_length=150)

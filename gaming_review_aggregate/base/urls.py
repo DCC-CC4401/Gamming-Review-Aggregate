@@ -9,4 +9,5 @@ urlpatterns = [
   path('nombre-buscado/', views.buscar, name='nombre-buscado/'),
   path('juego-agregado/', views.juegoAgregado, name='juego-agregado/'),
   path('cuenta-creada/', views.cuentaCreada, name='cuenta-creada/'),
+  path('perfil/', views.perfil, name='perfil/'),
 ]

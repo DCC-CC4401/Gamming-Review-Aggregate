@@ -114,3 +114,8 @@ def cuentaCreada(request):
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})
+
+
+def perfil(request): #the homepage view
+    if request.method == "GET":
+       return render(request, "base/perfil-usuario.html")
