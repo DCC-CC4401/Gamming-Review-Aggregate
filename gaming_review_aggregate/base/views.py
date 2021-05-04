@@ -3,7 +3,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from django.db.models import Q
-
 from base.models import User, Game
 
 
@@ -142,4 +141,3 @@ def perfil_actualizado(request):
     usuario.descripcion = edit_descripcion_usuario
     usuario.save(update_fields=["edad","email","descripcion"])
     return redirect('perfil/')
-
