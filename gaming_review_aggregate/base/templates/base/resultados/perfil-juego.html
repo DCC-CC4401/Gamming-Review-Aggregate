@@ -1,0 +1,33 @@
+{% extends "base/main-template.html" %}
+
+{% block head %} 
+<link rel="stylesheet" href="../../static/css/juego.css">
+{% endblock %}
+
+{% block content %} 
+<div class="content">
+  <div class="container">
+    {% if game|length %}
+    <div class="main">
+      <img class="responsive-img" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpcmedia.ign.com%2Fpc%2Fimage%2Fobject%2F142%2F14287819%2FLeague-of-Legends_ver2FULL_US.jpg&f=1&nofb=1" alt="">
+    </div>
+
+    <div class="aside">
+      {% for resultado in game %}
+      <h3>{{resultado.nombre}}</h3>
+      <p>Año de lanzamiento: <b> {{resultado.anio}}</b></p>
+      <p>Desarrollador: <b> {{resultado.desarrollador}}</b></p>
+      <p>Plataforma: <b> {{resultado.plataforma}}</b></p>
+      <p>Géneros: <b> {{resultado.genero}} </b> </p>
+      <p>Descripción: <b> {{resultado.descripcion}}</b></p>
+      {% endfor %}
+    </div>
+    {% else %}
+    <h3> No existe el juego ingresado </h3>
+    {% endif %}
+
+  </div>
+ 
+
+</div>
+{% endblock %}

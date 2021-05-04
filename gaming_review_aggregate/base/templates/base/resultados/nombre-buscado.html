@@ -16,7 +16,9 @@
           <tr>
             <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
             <td>
-              <h4>{{juego.nombre}}</h4>
+              <h4><a href="/perfil-juego/?nombre={{juego.id}}">{{juego.nombre}}</a> </h4>
+              <p> Desarrollador: <b>{{juego.desarrollador}}</b></p>
+              <p> Géneros :  <b>{{juego.genero}} </b></p>
               <p> {{juego.descripcion}}</p>
             </td>
           </tr>

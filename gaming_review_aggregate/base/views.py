@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.db.models import Q
 
 from base.models import User, Game
 
@@ -21,11 +22,12 @@ genres = ["Action", "Adventure", "Fighting", "Platform",
         "Sports", "Strategy", "Other"]
 
 games = Game.objects.all()
+usuarios = User.objects.all()
 
 
 def home(request): #the homepage view
     if request.method == "GET":
-       return render(request, "base/nav-bar/index.html")
+        return render(request, "base/nav-bar/index.html", { "games": games, "usuarios": usuarios})
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -67,14 +69,13 @@ def add_game(request): #the add game form view
         return render(request, "base/nav-bar/agregar-juego.html", {"plataforms": plataforms, "genres": genres})
 
 def buscar(request):
-    nombre = request.GET["search"]
-    resultados = Game.objects.filter(nombre__icontains=nombre)
+    buscado = request.GET["search"]
+    resultados = Game.objects.filter(Q(nombre__icontains=buscado) | Q(desarrollador__icontains=buscado) | Q(genero__icontains=buscado))
 
     if request.method == "GET":
         #Cuando se haga la consulta respecto al nombre buscado, hay que agregar los resultados en el diccionario, tipo:
         #return render(request, "base/buscar-nombre.html", {"buscado": nombre, "resultados": resultados})
-
-        return render(request, "base/resultados/nombre-buscado.html", {"buscado": nombre, "resultados": resultados})
+        return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
 
 def juegoAgregado(request):
     nombre = request.POST["nombre"]
@@ -97,6 +98,13 @@ def juegoAgregado(request):
     games.update()
     if request.method == "POST":
         return render(request, "base/resultados/juego-agregado.html", dic)
+
+def perfilJuego(request):
+    nombre = request.GET["nombre"]
+    resultado = Game.objects.filter(id=nombre)
+    print(resultado)
+    if request.method == "GET":
+        return render(request, "base/resultados/perfil-juego.html", {"game": resultado})
 
 def cuentaCreada(request):
     new_user = request.POST["new-user"]
