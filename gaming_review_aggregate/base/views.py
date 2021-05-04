@@ -6,7 +6,6 @@ from django.utils import timezone
 from base.models import User, Game
 
 
-
 plataforms = ["Android", "Arcade", "Atari",
         "Game Boy", "Game Boy Advance", "Game Boy Color",
         "Nintendo 3DS", "Nintendo 64", "Nintendo DS", "Nintendo DSi",
@@ -69,15 +68,13 @@ def add_game(request): #the add game form view
 
 def buscar(request):
     nombre = request.GET["search"]
-
-    #Acá hay que crear un código que, dado el nombre ingresado, haga una consulta respecto a ese nombre, tipo:
-     #resultados = codigo que hace la consulta
+    resultados = Game.objects.filter(nombre__icontains=nombre)
 
     if request.method == "GET":
         #Cuando se haga la consulta respecto al nombre buscado, hay que agregar los resultados en el diccionario, tipo:
         #return render(request, "base/buscar-nombre.html", {"buscado": nombre, "resultados": resultados})
 
-        return render(request, "base/resultados/nombre-buscado.html", {"buscado": nombre})
+        return render(request, "base/resultados/nombre-buscado.html", {"buscado": nombre, "resultados": resultados})
 
 def juegoAgregado(request):
     nombre = request.POST["nombre"]

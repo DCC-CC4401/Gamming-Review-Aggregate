@@ -8,66 +8,24 @@
 <div class="content">
   <div class="container">
     <div class="popular-games">
+      {% if resultados|length %}
       <h3> Resultados búsqueda: {{buscado}}</h3>
-      <table class="table table-striped">
+      <table>
         <tbody>
+          {% for juego in resultados %}
           <tr>
             <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
             <td>
-              <h4>bla bla bla bla</h4>
-              <p>aaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
+              <h4>{{juego.nombre}}</h4>
+              <p> {{juego.descripcion}}</p>
             </td>
           </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
-
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4>bla bla</h4>
-              <p>aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaaaa
-              aaaaaaaaaaaaaaaaa
-              </p>
-              
-            </td>
-          </tr>
+          {% endfor %}
         </tbody>
       </table>
+      {% else %}
+      <h3> No se encontraron resultados para {{buscado}}</h3>
+      {% endif %}
     </div>
   </div>
 </div>
