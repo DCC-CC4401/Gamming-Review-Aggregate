@@ -63,6 +63,60 @@ th, td {
 	vertical-align: middle;
 }
 
+.main-link {
+  padding: 15px 30px;
+  border: 1px solid rgba(100,100,200,1);
+  background-color: rgba(100,100,200,1);
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-size: 1em;
+  color: white;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.main-link:hover {
+  border: 2px solid white;
+  background-color: white;
+  color: black;
+}
+
+.main-button {
+  font-size: 1em;
+  background-color: rgba(100,100,200,1);
+  color: white;
+  border: 2px solid rgba(100,100,200,1);
+  border-radius: 10px;
+  padding: 5px 10px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.main-button:hover {
+  background-color: white;
+  color: black;
+}
+
+.secondary-button {
+  font-size: o.75em;
+  background-color: rgba(100,100,200,1);
+  color: white;
+  border: 2px solid rgba(100,100,200,1);
+  border-radius: 5px;
+  padding: 2px 5px;
+  transition-duration: 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.secondary-button:hover {
+  background-color: white;
+  color: black;
+}
+
 /* -----------------------
 Layout styles
 ------------------------*/
@@ -90,20 +144,9 @@ Layout styles
 .nav li{
   display: inline;
   margin: auto;
-  padding: 1em;
-}
-
-.nav a{
-  display: inline;
-  padding: 0;
-  border-bottom: 0;
-  color: #fff;
-  text-decoration: none;
-}
-
-.nav a:hover{
-	color: white;
-	background-color: rgba(0,0,38,0.9);
+  padding-top: 1em;
+  font-size: 14px;
+  /*padding: 1em;/*/
 }
 
 .nav form {
@@ -115,6 +158,8 @@ Layout styles
   background: rgb(100,200,100);
   color: rgb(250,250,250);
 }
+
+
 
 #search{
   width:60%;
@@ -157,14 +202,18 @@ Layout styles
   width: 100%;
   max-width: 320px;
   min-width: 160px;
-}
-
+} 
 
 /* -----------------------
 Wide styles
 ------------------------*/
 
-@media (max-width: 830px){
+@media (max-width: 800px){
+  .main-link {
+  padding: 10px 0;
+  }
+
+
   .nav-bar{
     font-size: 1em;
   }
@@ -173,8 +222,10 @@ Wide styles
   }
 
   .nav li{
+    margin: 0;
     display: block;
-    padding: 0.2em;
+    padding: 0;
+    font-size: 12px;
   }
 
   .nav form {
@@ -183,7 +234,9 @@ Wide styles
   }
 
   #search{
-    width: 40%;
+    width: 30%;
+    font-size: 12px;
+    
   }
 
   .content {
@@ -199,6 +252,4 @@ Wide styles
   .aside{
     width: auto;
   }
-
 }
-

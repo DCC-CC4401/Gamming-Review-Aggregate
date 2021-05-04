@@ -1,57 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base/main-template.html" %}
 
-  <head>
-    <meta charset="utf-8">
-    <title>GRA</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/juego.css">
-  </head>
+{% block head %}
+<link rel="stylesheet" href="../../static/css/juego.css">
+{% endblock %}
 
-  <body>
-    <div class="nav-bar">
-      <ul class="nav">
-        <li><a href="index.html">Simbolo</a></li>
-        <li><a href="popular-games.html">Popular Games</a></li>
-        <li><a href="popular-games.html">Features</a></li>
-        <li><form action=''  id='search-form' method='get'>
-            <input id="search" name='q' placeholder='Ingresa un nombre' type='text'/>
-            <input id='button-submit' type='submit' value='Search'/>
-          </form>
-        </li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="main">
+      <img class="responsive-img" src="../../static/img/chinita.jpeg" alt="">
     </div>
 
-
-    <div class="content">
-      <div class="container">
-        <div class="main">
-          <img class="responsive-img" src="img/chinita.jpeg" alt="">
-        </div>
-
-        <div class="aside">
-          <h3>Nombre usuario </h3>
-          <p>Edad: <b>bla bla bla bla bla bla</b></p>
-          <p>Género: <b>bla bla bla bla bla bla</b></p>
-          <p>Descripción: <b>bla bla bla bla bla bla</b></p>
-        </div>
-      </div>
-      <div class="container">
-        <div class="reviews">
-          <h3>Reviews hechas por el usuario</h3>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-          <p>bla bla </p>
-        </div>
-      </div>
+    <div class="aside">
+      <h3>{{user}}</h3>
+      <p>Edad: <b>{{user.edad}}</b></p>
+      <p>Correo: <b>{{user.email}}</b></p>
+      <p>Descripción: <b>{{user.descripcion}}</b></p>
+      <a href="/editar_perfil/">
+        <button class="main-button" type="button"> Editar Perfil </button>
+      </a>
+      <a href="/sesion_cerrada/">
+        <button class="main-button" type="button"> Cerrar Sesión </button>
+      </a>
     </div>
-  </body>
-
-</html>
+  </div>
+  <div class="container">
+    <div class="reviews">
+      <h3>Reviews hechas por {{user}}</h3>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+      <p>bla bla </p>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base/main-template.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../../static/css/juego.css">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <h3>El siguiente juego fue agregado con éxito</h3>
+  </div>
+  <div class="container">
+    <div class="main">
+      <img class="responsive-img" src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fpcmedia.ign.com%2Fpc%2Fimage%2Fobject%2F142%2F14287819%2FLeague-of-Legends_ver2FULL_US.jpg&f=1&nofb=1" alt="">
+    </div>
+    <div class="aside">
+      <h3>{{nombre}}</h3>
+      <p>Año de lanzamiento: <b> {{anio}}</b></p>
+      <p>Descripción: <b> {{descripcion}}</b></p>
+      <p>Desarrollador: <b> {{desarrollador}}</b></p>
+      <p>Plataforma: <b> {{plataforma}}</b></p>
+      <p>Géneros:
+      {% for gen in generos %}
+      <b> {{gen}}  </b>
+      {% endfor %}
+      </p>
+    </div>
+    <a href="/popular_games">
+      <button class="main-button" type="button"> Ver Listado </button>
+    </a>
+  </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,16 +1,9 @@
 .main{
-  width: 45%;
+  width: 60%;
   margin-right: 5%;
   margin-bottom: 1em;
   padding: 1em;
 }
-
-.aside{
-  width: 45%;
-  margin-bottom: 1em;
-  padding: 1em;
-}
-
 
 .formulario {
   background-color: rgba(100,100,100,0.1);
@@ -42,7 +35,7 @@
 	margin-left: 35%;
 }
 
-@media (max-width: 800px){
+@media (max-width: 830px){
   .main {
     margin-bottom: 1em;
     width: auto;
@@ -54,7 +47,7 @@
   }
 }
 
-@media(max-width: 1200px){
+@media(max-width:1170px){
 	.leyenda {
 		display: block;
 		width: 25%;
