@@ -27,14 +27,12 @@
   <div class="container">
     <div class="reviews">
       <h3>Reviews hechas por {{user}}</h3>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
-      <p>bla bla </p>
+      {% for review in reviews %}
+        {% if review.author.username == user.username %}
+          <p>Juego: <b>{{review.game.nombre}}</b></p>
+          <p>Reseña: <b>{{review.body}}</b></p>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
 </div>
