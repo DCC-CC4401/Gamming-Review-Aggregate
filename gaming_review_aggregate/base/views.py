@@ -3,7 +3,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
 from django.db.models import Q
-from base.models import User, Game
+from base.models import User, Game, Review
+
 
 
 plataforms = ["Android", "Arcade", "Atari",
@@ -21,12 +22,12 @@ genres = ["Action", "Adventure", "Fighting", "Platform",
         "Sports", "Strategy", "Other"]
 
 games = Game.objects.all()
-usuarios = User.objects.all()
-
+users = User.objects.all()
+reviews = Review.objects.all()
 
 def home(request): #the homepage view
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": games, "usuarios": usuarios})
+        return render(request, "base/nav-bar/index.html", { "games": games, "users": users})
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -74,7 +75,10 @@ def buscar(request):
     if request.method == "GET":
         #Cuando se haga la consulta respecto al nombre buscado, hay que agregar los resultados en el diccionario, tipo:
         #return render(request, "base/buscar-nombre.html", {"buscado": nombre, "resultados": resultados})
+
         return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
+
+
 
 def juegoAgregado(request):
     nombre = request.POST["nombre"]
@@ -84,7 +88,7 @@ def juegoAgregado(request):
     plat = request.POST["plat"]
     gen = request.POST.getlist("gen")
 
-    dic = {"nombre": nombre, 
+    dic = {"nombre": nombre,
             "anio": anio,
             "descripcion": descripcion,
             "desarrollador": desarrollador,
@@ -113,7 +117,7 @@ def cuentaCreada(request):
     #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
     #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
     user = User.objects.create_user(username=new_user, nombre=new_user, password=new_password1)
-
+    users.update()
     if request.method == "POST":
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
@@ -121,10 +125,10 @@ def cuentaCreada(request):
 
 def perfil(request): #the homepage view
     if request.method == "GET":
-        return render(request, "base/perfil-usuario.html")
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
 
     elif request.method == "POST":
-        return render(request, "base/perfil-usuario.html")
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
 
 def editar_perfil(request): #the homepage view
     if request.method == "GET":
@@ -141,3 +145,22 @@ def perfil_actualizado(request):
     usuario.descripcion = edit_descripcion_usuario
     usuario.save(update_fields=["edad","email","descripcion"])
     return redirect('perfil/')
+
+def add_review(request): #the add game form view
+    if request.method == "GET":
+        return render(request, "base/agregar-review.html", {"users" : users, "games": games})
+
+def review_agregada(request):
+    autor = request.POST["author"]
+    juego = request.POST["game"]
+    review = request.POST["game_review"]
+
+    #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
+    #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
+    autor_user = User.objects.get(username=autor)
+    juego_obj = Game.objects.get(nombre=juego)
+    review = Review.objects.create(author=autor_user, game=juego_obj, body=review)
+    reviews.update()
+    if request.method == "POST":
+        review.save()
+        return render(request, "base/resultados/review-agregada.html", {"user": autor})

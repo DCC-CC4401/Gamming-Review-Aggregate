@@ -14,4 +14,6 @@ urlpatterns = [
   path('editar_perfil/', views.editar_perfil, name='editar_perfil/'),
   path('perfil_actualizado/', views.perfil_actualizado, name='perfil_actualizado/'),
   path('sesion_cerrada/', views.user_logout, name='sesion_cerrada/'),
+  path('agregar_review/', views.add_review, name='agregar_review/'),
+  path('review_agregada/', views.review_agregada, name='review_agregada/'),
 ]

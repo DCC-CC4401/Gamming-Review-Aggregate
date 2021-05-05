@@ -1,0 +1,48 @@
+{% extends "base/main-template.html" %}
+
+{% block head %} 
+<link rel="stylesheet" href="../../static/css/agregar-juego.css">
+{% endblock %}
+
+{% block content %} 
+<div class="content">
+    <div class="container">
+      <div class="main">
+        <h3>Escribe tu reseña:</h3>
+        <div class="formulario">
+          <form action="/review_agregada/" method="post" >
+            {% csrf_token %}
+
+            <div class="entrada">
+                <div class="leyenda">Autor</div>
+                <select id="author" name="author">
+                  {% for user in users %}
+                  <option>  {{user.nombre}} </option>
+                  {% endfor %}
+                </select>
+            </div>
+
+            <div class="entrada">
+                <div class="leyenda">Juego</div>
+                <select id="game" name="game">
+                  {% for game in games %}
+                  <option>  {{game.nombre}} </option>
+                  {% endfor %}
+                </select>
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda" >Reseña</div>
+              <textarea rows="8" cols="40" required id="game_review" name="game_review" placeholder="Escribe tu reseña"></textarea>
+            </div>
+
+            <!-- Botón de envío-->
+            <div class="entrada">
+              <button class="main-button" type="submit"> Guardar reseña </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}
