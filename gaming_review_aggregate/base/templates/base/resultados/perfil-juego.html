@@ -22,6 +22,19 @@
       <p>Descripción: <b> {{resultado.descripcion}}</b></p>
       {% endfor %}
     </div>
+  </div>
+
+  <div class="container">
+    <div class="reviews">
+      <h3>Reseñas</h3>
+      <hr>
+        {% for review in reviews %}
+        <p> Autor: {{review.author.nombre}}</p>
+        <p> Reseña:  {{review.body}}</p>
+        <hr>
+        {% endfor %}
+    </div>
+  </div>
     {% else %}
     <h3> No existe el juego ingresado </h3>
     {% endif %}

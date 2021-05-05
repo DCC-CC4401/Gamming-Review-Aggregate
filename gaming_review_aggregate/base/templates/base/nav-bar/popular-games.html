@@ -14,7 +14,7 @@
           {% for game in games %}
             <tr>
               <td>
-                <p>Nombre: <b>{{game.nombre}}</b></p>
+                <p>Nombre: <b>  <a href="/perfil-juego/?nombre={{game.id}}">{{game.nombre}}</a></b></p>
                 <p>Año: <b>{{game.anio}}</b></p>
                 <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
                 <p>Plataforma: <b>{{game.plataforma}}</b></p>

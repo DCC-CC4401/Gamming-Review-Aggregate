@@ -78,8 +78,6 @@ def buscar(request):
 
         return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
 
-
-
 def juegoAgregado(request):
     nombre = request.POST["nombre"]
     anio = request.POST["anio"]
@@ -105,9 +103,9 @@ def juegoAgregado(request):
 def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
-    print(resultado)
+    reviews = Review.objects.filter(game=nombre)
     if request.method == "GET":
-        return render(request, "base/resultados/perfil-juego.html", {"game": resultado})
+        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews})
 
 def cuentaCreada(request):
     new_user = request.POST["new-user"]
