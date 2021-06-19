@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Q
-from base.models import User, Game, Review
+from base.models import User, Game, Review, Friend_Request
 
 
 
@@ -24,6 +25,7 @@ genres = ["Action", "Adventure", "Fighting", "Platform",
 games = Game.objects.all()
 users = User.objects.all()
 reviews = Review.objects.all()
+friend_requests = Friend_Request.objects.all()
 
 def home(request): #the homepage view
     if request.method == "GET":
@@ -122,11 +124,13 @@ def cuentaCreada(request):
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})
 
 def perfil(request): #the homepage view
+    this_user = request.user
+    this_friend_requests = Friend_Request.objects.filter(to_user=this_user)
     if request.method == "GET":
-        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user,"users": users})
 
     elif request.method == "POST":
-        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user, "users": users})
 
 def editar_perfil(request): #the homepage view
     if request.method == "GET":
@@ -162,3 +166,24 @@ def review_agregada(request):
     if request.method == "POST":
         review.save()
         return render(request, "base/resultados/review-agregada.html", {"user": autor})
+
+@login_required
+def send_friend_request(request, userID):
+    from_user = request.user
+    to_user = User.objects.get(id=userID)
+    friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
+    if created:
+        return HttpResponse('friend request sent')
+    else:
+        return HttpResponse('friend request was already sent')
+
+@login_required
+def accept_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.to_user.friends.add(friend_request.from_user)
+        friend_request.from_user.friends.add(friend_request.to_user)
+        friend_request.delete()
+        return HttpResponse('friend request accepted')
+    else:
+        return HttpResponse('friend request not accepted')

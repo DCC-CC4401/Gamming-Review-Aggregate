@@ -25,15 +25,20 @@
       </table>
     </div>
 
+
     <div class="aside">
-      <h3>Últimos usuario registrados</h3>
+      <h3>Agregar amigos</h3>
       <table class="table table-striped">
         <tbody>
           {% for user in users %}
+          {% if not user.is_superuser %}
+          {% if user not in request.user.friends.all and user != request.user %}
           <tr>
-            <td><p>{{user}}<p></td>
+            <td>{{user}}<br><a href="/send_friend_request/{{user.id}}/">send friend request</a></td>
 
           </tr>
+          {% endif %}
+          {% endif %}
           {% endfor %}
         </tbody>
       </table>

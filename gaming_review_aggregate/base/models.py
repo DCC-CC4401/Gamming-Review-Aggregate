@@ -7,6 +7,7 @@ class User(AbstractUser):
     password = models.CharField(blank=False, max_length=100)
     edad = models.IntegerField(null=True)
     descripcion = models.TextField(max_length=2000, default="Acá va la descripción de usuario")
+    friends = models.ManyToManyField("User", blank=True)
 
 
 class Game(models.Model):
@@ -28,16 +29,21 @@ class Genre(models.Model):
 
 
 class Rating(models.Model):
-    score = models.IntegerField(max_value=10, min_value=0)  # nose si existen min y max value
+    #score = models.IntegerField(max_value=10, min_value=0)  # nose si existen min y max value
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE)
     review_body = models.TextField(max_length=2000)
 
 
-class Friendship(models.Model):
-   user1 = models.ForeignKey(User, on_delete=models.CASCADE)
-   user2 = models.ForeignKey(User, on_delete=models.CASCADE)
+#class Friendship(models.Model):
+#   user1 = models.ForeignKey(User, on_delete=models.CASCADE)
+#   user2 = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Friend_Request(models.Model):
+   from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+   to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
+
 
 class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
