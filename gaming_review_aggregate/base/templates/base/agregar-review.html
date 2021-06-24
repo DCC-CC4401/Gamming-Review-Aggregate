@@ -14,21 +14,17 @@
             {% csrf_token %}
 
             <div class="entrada">
-                <div class="leyenda">Autor</div>
-                <select id="author" name="author">
-                  {% for user in users %}
-                  <option>  {{user.nombre}} </option>
-                  {% endfor %}
-                </select>
-            </div>
-
-            <div class="entrada">
                 <div class="leyenda">Juego</div>
                 <select id="game" name="game">
                   {% for game in games %}
                   <option>  {{game.nombre}} </option>
                   {% endfor %}
                 </select>
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda" >Puntaje</div>
+              <input type="number" id="quantity" name="score" min="1" max="5">
             </div>
 
             <div class="entrada">

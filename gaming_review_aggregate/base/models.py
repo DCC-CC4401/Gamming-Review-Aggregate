@@ -16,6 +16,8 @@ class Game(models.Model):
     descripcion = models.TextField(max_length=2000)
     desarrollador = models.CharField(max_length=150)
     genero = models.CharField(max_length=150)
+    plataforma = models.CharField(max_length=150, default="PC")
+    promedio = models.IntegerField(default=0)
 
 
 class Platform(models.Model):
@@ -28,18 +30,6 @@ class Genre(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
 
-class Rating(models.Model):
-    #score = models.IntegerField(max_value=10, min_value=0)  # nose si existen min y max value
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    platform = models.ForeignKey(Platform, on_delete=models.CASCADE)
-    review_body = models.TextField(max_length=2000)
-
-
-#class Friendship(models.Model):
-#   user1 = models.ForeignKey(User, on_delete=models.CASCADE)
-#   user2 = models.ForeignKey(User, on_delete=models.CASCADE)
-
 class Friend_Request(models.Model):
    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
@@ -48,7 +38,8 @@ class Friend_Request(models.Model):
 class Review(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    body = models.TextField(max_length= 2000)
+    score = models.IntegerField(default=0)
+    body = models.TextField(max_length= 2000, blank=True)
 
 #class GameMedia(models.Model):
    #img = models.image??? ayuda

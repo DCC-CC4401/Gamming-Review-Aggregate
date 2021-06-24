@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.db.models import Q
+from django.db.models import Q, Avg
 from base.models import User, Game, Review, Friend_Request
 
 
@@ -106,8 +106,9 @@ def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
     reviews = Review.objects.filter(game=nombre)
+    prom = list(reviews.aggregate(Avg('score')).values())[0]
     if request.method == "GET":
-        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews})
+        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
 
 def cuentaCreada(request):
     new_user = request.POST["new-user"]
@@ -153,15 +154,16 @@ def add_review(request): #the add game form view
         return render(request, "base/agregar-review.html", {"users" : users, "games": games})
 
 def review_agregada(request):
-    autor = request.POST["author"]
+    autor = request.user
     juego = request.POST["game"]
+    puntaje = request.POST["score"]
     review = request.POST["game_review"]
 
     #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
     #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
     autor_user = User.objects.get(username=autor)
     juego_obj = Game.objects.get(nombre=juego)
-    review = Review.objects.create(author=autor_user, game=juego_obj, body=review)
+    review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review)
     reviews.update()
     if request.method == "POST":
         review.save()
