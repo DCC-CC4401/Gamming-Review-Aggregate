@@ -47,8 +47,17 @@
       <h3>Reviews hechas por {{user}}</h3>
       {% for review in reviews %}
         {% if review.author.username == user.username %}
-          <p>Juego: <b>{{review.game.nombre}}</b></p>
-          <p>Reseña: <b>{{review.body}}</b></p>
+          <table>
+            <tr>
+            <td>Juego: <b>{{review.game.nombre}}</b></td>
+          </tr>
+          <tr>
+            <td>Puntaje: <b>{{review.score}}</b></td>
+          </tr>
+          <tr>
+            <td>Reseña: <b>{{review.body}}</b></td>
+          </tr>
+          </table>
         {% endif %}
       {% endfor %}
     </div>
