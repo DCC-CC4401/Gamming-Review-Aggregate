@@ -159,9 +159,13 @@ def review_agregada(request):
     puntaje = request.POST["score"]
     review = request.POST["game_review"]
 
-    #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
-    #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
-    autor_user = User.objects.get(username=autor)
+    if request.user.is_authenticated:
+        autor_user = User.objects.get(username=autor)
+    else:
+        autor_user, created = User.objects.get_or_create(username="Anonimo", nombre = "Anonimo", password = "nada")
+        if created:
+            autor_user.save()
+
     juego_obj = Game.objects.get(nombre=juego)
     review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review)
     reviews.update()

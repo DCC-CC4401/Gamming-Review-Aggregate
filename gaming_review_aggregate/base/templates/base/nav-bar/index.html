@@ -31,7 +31,7 @@
       <table class="table table-striped">
         <tbody>
           {% for user in users %}
-          {% if not user.is_superuser %}
+          {% if not user.is_superuser and user.username != 'Anonimo'%}
           {% if user not in request.user.friends.all and user != request.user %}
           <tr>
             <td>{{user}}<br><a href="/send_friend_request/{{user.id}}/">send friend request</a></td>
