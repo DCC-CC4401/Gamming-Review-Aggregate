@@ -1,10 +1,10 @@
 {% extends "base/main-template.html" %}
 
-{% block head %} 
+{% block head %}
 <link rel="stylesheet" href="../../static/css/agregar-juego.css">
 {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="content">
     <div class="container">
       <div class="main">
@@ -16,7 +16,7 @@
 
             <div class="entrada">
               <div class="leyenda" >Nombre del juego</div>
-              <input type="text" required id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
+              <input type="text" required id="nombre" name="nombre" size=100 placeholder= "Ingresa el nombre del juego">
             </div>
 
             <div class="entrada">
@@ -31,7 +31,7 @@
 
             <div class="entrada">
               <div class="leyenda">Desarrollador</div>
-              <input type="text" required id="dev" name="dev" size=100 placeholder= "Ingrese nombre del desarrollador">
+              <input type="text" required id="dev" name="dev" size=100 placeholder= "Ingresa el nombre del desarrollador">
             </div>
 
             <div class="entrada">
@@ -42,14 +42,14 @@
                 {% endfor %}
               </select>
             </div>
-            
+
             <div class="entrada">
               <div class="leyenda">Géneros</div>
               <select id="gen" name="gen">
                 {% for option in genres %}
                 <option> {{option}} </option>
                 {% endfor %}
-              </select> 
+              </select>
 
               <div id="addgenre2" style="display: inline;"></div>
 
@@ -57,7 +57,7 @@
 
               <button type="button" class="secondary-button" onclick="addgenre()" id="add-genre-button" style="display: inline;"> Agregar Género </button>
             </div>
-            
+
             <!-- Script para el botón de agregar generos -->
             <script>
               function addgenre(){
@@ -84,7 +84,7 @@
             </script>
 
             <!-- Botón de envío-->
-            <div class="entrada">            
+            <div class="entrada">
               <button class="main-button" type="submit"> Agregar juego </button>
             </div>
           </form>

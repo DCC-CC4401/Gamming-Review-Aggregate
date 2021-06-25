@@ -106,7 +106,7 @@ def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
     reviews = Review.objects.filter(game=nombre)
-    prom = list(reviews.aggregate(Avg('score')).values())[0]
+    prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
     if request.method == "GET":
         return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
 
