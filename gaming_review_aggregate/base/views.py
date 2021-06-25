@@ -28,8 +28,9 @@ reviews = Review.objects.all()
 friend_requests = Friend_Request.objects.all()
 
 def home(request): #the homepage view
+    top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio')
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": games, "users": users})
+        return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -106,7 +107,11 @@ def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
     reviews = Review.objects.filter(game=nombre)
-    prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+    try:
+        prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+    except:
+        prom = 0.0
+    resultado.update(promedio=prom)
     if request.method == "GET":
         return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
 
@@ -169,6 +174,11 @@ def review_agregada(request):
     juego_obj = Game.objects.get(nombre=juego)
     review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review)
     reviews.update()
+
+    game_reviews = reviews.filter(game=juego_obj)
+    prom = round(list(game_reviews.aggregate(Avg('score')).values())[0],1)
+    thegame = games.filter(nombre=juego)
+    thegame.update(promedio=prom)
     if request.method == "POST":
         review.save()
         return render(request, "base/resultados/review-agregada.html", {"user": autor})

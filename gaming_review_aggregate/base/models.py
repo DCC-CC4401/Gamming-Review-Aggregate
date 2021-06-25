@@ -17,7 +17,7 @@ class Game(models.Model):
     desarrollador = models.CharField(max_length=150)
     genero = models.CharField(max_length=150)
     plataforma = models.CharField(max_length=150, default="PC")
-    promedio = models.IntegerField(default=0)
+    promedio = models.FloatField(default=0)
 
 
 class Platform(models.Model):

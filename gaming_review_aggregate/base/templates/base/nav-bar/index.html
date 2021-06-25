@@ -9,7 +9,7 @@
   </div>
   <div class="container">
     <div class="main">
-      <h3> Últimos juegos agregados</h3>
+      <h3>Top de juegos mejor calificados:</h3>
       <table class="table table-striped">
         <tbody>
           {% for juego in games %}
@@ -17,6 +17,7 @@
             <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
             <td>
               <h4><a href="/perfil-juego/?nombre={{juego.id}}">{{juego.nombre}}</a> </h4>
+              <p>Puntaje: {{juego.promedio}}</p>
               <p>{{juego.descripcion}}</p>
             </td>
           </tr>
