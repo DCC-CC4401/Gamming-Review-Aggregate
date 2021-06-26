@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from django.db.models import Q
-from base.models import User, Game, Review
+from django.db.models import Q, Avg
+from base.models import User, Game, Review, Friend_Request
 
 
 
@@ -24,10 +25,12 @@ genres = ["Action", "Adventure", "Fighting", "Platform",
 games = Game.objects.all()
 users = User.objects.all()
 reviews = Review.objects.all()
+friend_requests = Friend_Request.objects.all()
 
 def home(request): #the homepage view
+    top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio')
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": games, "users": users})
+        return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -104,8 +107,13 @@ def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
     reviews = Review.objects.filter(game=nombre)
+    try:
+        prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+    except:
+        prom = 0.0
+    resultado.update(promedio=prom)
     if request.method == "GET":
-        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews})
+        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
 
 def cuentaCreada(request):
     new_user = request.POST["new-user"]
@@ -122,11 +130,13 @@ def cuentaCreada(request):
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})
 
 def perfil(request): #the homepage view
+    this_user = request.user
+    this_friend_requests = Friend_Request.objects.filter(to_user=this_user)
     if request.method == "GET":
-        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user,"users": users})
 
     elif request.method == "POST":
-        return render(request, "base/perfil-usuario.html", {"reviews": reviews})
+        return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user, "users": users})
 
 def editar_perfil(request): #the homepage view
     if request.method == "GET":
@@ -149,16 +159,47 @@ def add_review(request): #the add game form view
         return render(request, "base/agregar-review.html", {"users" : users, "games": games})
 
 def review_agregada(request):
-    autor = request.POST["author"]
+    autor = request.user
     juego = request.POST["game"]
+    puntaje = request.POST["score"]
     review = request.POST["game_review"]
 
-    #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
-    #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
-    autor_user = User.objects.get(username=autor)
+    if request.user.is_authenticated:
+        autor_user = User.objects.get(username=autor)
+    else:
+        autor_user, created = User.objects.get_or_create(username="Anonimo", nombre = "Anonimo", password = "nada")
+        if created:
+            autor_user.save()
+
     juego_obj = Game.objects.get(nombre=juego)
-    review = Review.objects.create(author=autor_user, game=juego_obj, body=review)
+    review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review)
     reviews.update()
+
+    game_reviews = reviews.filter(game=juego_obj)
+    prom = round(list(game_reviews.aggregate(Avg('score')).values())[0],1)
+    thegame = games.filter(nombre=juego)
+    thegame.update(promedio=prom)
     if request.method == "POST":
         review.save()
         return render(request, "base/resultados/review-agregada.html", {"user": autor})
+
+@login_required
+def send_friend_request(request, userID):
+    from_user = request.user
+    to_user = User.objects.get(id=userID)
+    friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
+    if created:
+        return HttpResponse('friend request sent')
+    else:
+        return HttpResponse('friend request was already sent')
+
+@login_required
+def accept_friend_request(request, requestID):
+    friend_request = Friend_Request.objects.get(id=requestID)
+    if friend_request.to_user == request.user:
+        friend_request.to_user.friends.add(friend_request.from_user)
+        friend_request.from_user.friends.add(friend_request.to_user)
+        friend_request.delete()
+        return HttpResponse('friend request accepted')
+    else:
+        return HttpResponse('friend request not accepted')

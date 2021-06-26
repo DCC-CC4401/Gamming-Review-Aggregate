@@ -20,6 +20,7 @@
       <p>Plataforma: <b> {{resultado.plataforma}}</b></p>
       <p>Géneros: <b> {{resultado.genero}} </b> </p>
       <p>Descripción: <b> {{resultado.descripcion}}</b></p>
+      <p>Puntaje promedio: <b> {{prom}} de 5.0</b></p>
       {% endfor %}
     </div>
   </div>
@@ -30,6 +31,7 @@
       <hr>
         {% for review in reviews %}
         <p> Autor: {{review.author.nombre}}</p>
+        <p> Puntaje: {{review.score}}</p>
         <p> Reseña:  {{review.body}}</p>
         <hr>
         {% endfor %}

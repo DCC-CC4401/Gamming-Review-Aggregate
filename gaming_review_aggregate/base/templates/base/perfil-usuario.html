@@ -25,12 +25,39 @@
     </div>
   </div>
   <div class="container">
+    <div class="friend_requests">
+      <h3>Solicitudes de amistad pendientes</h3>
+      {% for friend_request in friend_requests %}
+        {{friend_request.from_user}}<br><a href="/accept_friend_request/{{friend_request.id}}/">accept friend request</a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="container">
+    <div class="friends">
+      <h3>Mis amigos</h3>
+      {% for friend in user.friends.all %}
+      <tr>
+        <td>{{friend.nombre}}</td>
+      </tr>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="container">
     <div class="reviews">
       <h3>Reviews hechas por {{user}}</h3>
       {% for review in reviews %}
         {% if review.author.username == user.username %}
-          <p>Juego: <b>{{review.game.nombre}}</b></p>
-          <p>Reseña: <b>{{review.body}}</b></p>
+          <table>
+            <tr>
+            <td>Juego: <b>{{review.game.nombre}}</b></td>
+          </tr>
+          <tr>
+            <td>Puntaje: <b>{{review.score}}</b></td>
+          </tr>
+          <tr>
+            <td>Reseña: <b>{{review.body}}</b></td>
+          </tr>
+          </table>
         {% endif %}
       {% endfor %}
     </div>
