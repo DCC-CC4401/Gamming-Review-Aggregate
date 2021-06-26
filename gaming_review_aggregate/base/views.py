@@ -27,7 +27,8 @@ games = Game.objects.all()
 users = User.objects.all()
 reviews = Review.objects.all()
 friend_requests = Friend_Request.objects.all()
-genres = Genre.objects.all()
+genre = Genre.objects.all()
+fotos = GameMedia.objects.all()
 
 def home(request): #the homepage view
     top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio')
@@ -67,7 +68,7 @@ def user_logout(request):
 
 def popular_games(request): # the popular games view
     if request.method == "GET":
-        return render(request, "base/nav-bar/popular-games.html", {"genres" : genres, "games": games})
+        return render(request, "base/nav-bar/popular-games.html", {"genres" : genre, "games": games, "fotos": fotos})
 
 def add_game(request): #the add game form view
     if request.method == "GET":
@@ -111,7 +112,7 @@ def juegoAgregado(request):
     with open(file_path, 'wb') as image: 
         image.write(foto.file.read())
 
-    foto = GameMedia.objects.create(nombre = foto.name, path = file_path, game = game)
+    foto = GameMedia.objects.create(nombre = foto.name, path = hash_archivo, game = game)
 
     dic = {"nombre": nombre,
             "anio": anio,
@@ -129,13 +130,21 @@ def perfilJuego(request):
     nombre = request.GET["nombre"]
     resultado = Game.objects.filter(id=nombre)
     reviews = Review.objects.filter(game=nombre)
+    generos = Genre.objects.filter(game=nombre)
+    foto = GameMedia.objects.filter(game=nombre)
     try:
         prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
     except:
         prom = 0.0
     resultado.update(promedio=prom)
     if request.method == "GET":
-        return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
+        return render(request, "base/resultados/perfil-juego.html", {
+            "game": resultado, 
+            "reviews": reviews,
+            "generos": generos,
+            "foto": foto[0],
+            "prom": prom}
+            )
 
 def validate_user_login(request): # Validador del nombre de usuario
     username = request.GET.get('username', None)    # Rescatamos 'username' del json entregado

@@ -1,39 +1,41 @@
 {% extends "base/main-template.html" %}
 
 {% block head %}
-<link rel="stylesheet" href="../../static/css/popular-games.css">
+<link rel="stylesheet" href="../../static/css/juego.css">
 {% endblock %}
 
 {% block content %}
 <div class="content">
   <div class="container">
-    <div class="popular-games">
-      <h3> Lista de Juegos Agregados </h3>
-      <table class="table table-striped">
-        <tbody>
-          {% for game in games %}
-            <tr>
-              <td>
-                <p>Nombre: <b>  <a href="/perfil-juego/?nombre={{game.id}}">{{game.nombre}}</a></b></p>
-                <p>Año: <b>{{game.anio}}</b></p>
-                <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
-                <p>Plataforma: <b>{{game.plataforma}}</b></p>
-                <p>Genero: 
-                {% for genre in genres %}
-
-                {% if genre.id == game.id %}
-                <b> {{genre.nombre}}</b>
-                {% endif %}
-
-                {% endfor %}
-                </p>
-                <p>Descripción: <b>{{game.descripcion}}</b></p>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    <h3> Lista de Juegos Agregados </h3>
   </div>
+  <hr>
+  {% for game in games %}
+    <div class="container">
+      <div class="main">
+        {% for foto in fotos %}
+          {% if foto.game.id == game.id %}
+            <img class="responsive-img" src="../../static/media/{{foto.path}}" alt="">
+          {% endif %}
+        {% endfor %}
+ 
+      </div>
+      <div class="aside">
+        <p>Nombre: <b>  <a href="/perfil-juego/?nombre={{game.id}}">{{game.nombre}}</a></b></p>
+        <p>Año: <b>{{game.anio}}</b></p>
+        <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
+        <p>Plataforma: <b>{{game.plataforma}}</b></p>
+        <p>Géneros: 
+        {% for genre in genres %}
+        {% if genre.game.id == game.id %}
+        <b> {{genre.name}}</b>
+        {% endif %}
+        {% endfor %}
+        </p>
+        <p>Descripción: <b>{{game.descripcion}}</b></p>
+      </div>
+    </div>
+    <hr>
+  {% endfor %}
 </div>
 {% endblock %}

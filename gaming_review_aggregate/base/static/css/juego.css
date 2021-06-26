@@ -3,6 +3,9 @@
   margin-right: 5%;
   margin-bottom: 1em;
   padding: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .aside{
@@ -20,6 +23,9 @@
 
 .reviews{
   width: 100%
+}
+hr{
+  border: 1px dashed rgba(100,100,200, 0.4);
 }
 
 @media (max-width: 830px){
