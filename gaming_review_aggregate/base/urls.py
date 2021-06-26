@@ -1,9 +1,17 @@
 from django.urls import path
+from django.conf.urls import url
 from . import views
 
 urlpatterns = [
   path('home', views.home, name='home'),
+
   path('login', views.user_login, name='user_login'),
+  url(r'^login/validate_user_login/$', views.validate_user_login, name='validate_user_login/'),
+  url(r'^login/validate_passw_login/$', views.validate_passw_login, name='validate_passw_login/'),
+  url(r'^login/validate_username/$', views.validate_username, name='validate_username/'),
+  url(r'^login/validate_password/$', views.validate_password, name='validate_password/'),
+  url(r'^login/validate_both_passwords/$', views.validate_both_passwords, name='validate_both_passwords/'),
+
   path('popular_games', views.popular_games, name='popular_games'),
   path('add_game', views.add_game, name='add_game'),
   path('nombre-buscado/', views.buscar, name='nombre-buscado/'),
