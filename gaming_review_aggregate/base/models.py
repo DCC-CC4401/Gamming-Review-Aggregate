@@ -19,12 +19,6 @@ class Game(models.Model):
     plataforma = models.CharField(max_length=150, default="PC")
     promedio = models.FloatField(default=0)
 
-
-class Platform(models.Model):
-    name = models.CharField(max_length=150)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-
-
 class Genre(models.Model):
     name = models.CharField(max_length=30)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -41,9 +35,10 @@ class Review(models.Model):
     score = models.IntegerField(default=0)
     body = models.TextField(max_length= 2000, blank=True)
 
-#class GameMedia(models.Model):
-   #img = models.image??? ayuda
-   #game = models.ForeignKey(Game, on_delete=models.CASCADE)
+class GameMedia(models.Model):
+    nombre = models.CharField(max_length=150)
+    path = models.CharField(max_length=150)
+    game = models.ForeignKey(Game, on_delete=models.CASCADE)
 
 #class UserMedia(models.Model):
   #user = models.ForeignKey(User, on_delete=models.CASCADE)

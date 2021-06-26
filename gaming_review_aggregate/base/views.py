@@ -4,7 +4,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Q, Avg
-from base.models import User, Game, Review, Friend_Request
+from base.models import User, Game, Review, Friend_Request, Genre, GameMedia
+import hashlib
 
 
 
@@ -26,6 +27,7 @@ games = Game.objects.all()
 users = User.objects.all()
 reviews = Review.objects.all()
 friend_requests = Friend_Request.objects.all()
+genres = Genre.objects.all()
 
 def home(request): #the homepage view
     top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio')
@@ -88,18 +90,38 @@ def juegoAgregado(request):
     desarrollador = request.POST["dev"]
     plat = request.POST["plat"]
     gen = request.POST.getlist("gen")
+    foto = request.FILES["foto"]
+
+    # Acá hay que crear un código que, dado los datos anteriores, agregue a la base de datos el juego:
+    game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat)
+    games.update()
+
+    # Se agrega géneros a la base de datos
+    for g in gen:
+        add_g = Genre.objects.create(name = g, game= game)
+
+    # Se agrega foto a la base de datos
+    total_images = GameMedia.objects.all().count()
+
+    hash_archivo = str(total_images) + hashlib.sha256(
+            foto.name.encode()).hexdigest()[0:30]
+
+    file_path = './base/static/media/' + hash_archivo
+
+    with open(file_path, 'wb') as image: 
+        image.write(foto.file.read())
+
+    foto = GameMedia.objects.create(nombre = foto.name, path = file_path, game = game)
 
     dic = {"nombre": nombre,
             "anio": anio,
             "descripcion": descripcion,
             "desarrollador": desarrollador,
             "plataforma": plat,
-            "generos": gen
+            "generos": gen,
+            "foto": hash_archivo 
             }
 
-    #Acá hay que crear un código que, dado los datos anteriores, agregue a la base de datos el juego:
-    game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat, genero=gen)
-    games.update()
     if request.method == "POST":
         return render(request, "base/resultados/juego-agregado.html", dic)
 
