@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -114,6 +114,73 @@ def perfilJuego(request):
     resultado.update(promedio=prom)
     if request.method == "GET":
         return render(request, "base/resultados/perfil-juego.html", {"game": resultado, "reviews": reviews, "prom": prom})
+
+def validate_user_login(request): # Validador del nombre de usuario
+    username = request.GET.get('username', None)    # Rescatamos 'username' del json entregado
+    # Enviamos en otro json el resultado del validador
+    invalid_user = False
+    if (username == '' or len(username)<=1):
+        invalid_user = True
+    data = {
+        'invalid_user': invalid_user
+    }
+    return JsonResponse(data)
+
+def validate_passw_login(request): # Validador del nombre de usuario
+    passw = request.GET.get('passw', None)    # Rescatamos 'passw' del json entregado
+    # Enviamos en otro json el resultado del validador
+    invalid_passw = False
+    if (passw == '' or len(passw)<=1):
+        invalid_passw = True
+    data = {
+        'invalid_passw': invalid_passw
+    }
+    return JsonResponse(data)
+
+def validate_username(request): # Validador del nombre de usuario
+    new_user = request.GET.get('username', None)    # Rescatamos 'username' del json entregado
+    # Enviamos en otro json el resultado de buscar el nombre en la bbdd
+    data = {
+        'is_taken': User.objects.filter(username=new_user).exists()
+    }
+    return JsonResponse(data)
+
+def validate_password(request): # Validador de la contraseña
+    # Por ahora el validador solo varifica si es vacío o si el largo es mayor a 1
+    # De querer agregar más validaciones, hay que añadir otros parámetros al if
+
+    password = request.GET.get('password', None)    # Rescatamos 'password' del json entregado
+    # Enviamos en otro json el resultado de buscar el nombre en la bbdd
+    is_invalid = False
+    if (password == '' or len(password) <= 1 or password == None):
+        is_invalid = True
+    data = {
+        'is_invalid': is_invalid
+    }
+    return JsonResponse(data)
+
+def validate_both_passwords(request): # Validador de la segunda contraseña
+    password1 = request.GET.get('password1', None)    # Rescatamos 'password1' del json entregado
+    password2 = request.GET.get('password2', None)    # Rescatamos 'password2' del json entregado
+    # Verificamos si ambas entradas son iguales
+    is_invalid = False
+    if (password1 != password2 or password2 == ''):
+        is_invalid = True
+    data = {
+        'is_invalid': is_invalid
+    }
+    return JsonResponse(data)
+
+def validate_user(request): # Validador del usuario
+    new_user = request.GET.get('username', None)    # Rescatamos 'username' del json entregado
+    # Enviamos en otro json el resultado de buscar el nombre en la bbdd
+    is_taken = False
+    if (User.objects.filter(username=new_user).exists() or new_user == ''):
+        is_taken = True
+    data = {
+        'is_taken': is_taken
+    }
+    return JsonResponse(data)
 
 def cuentaCreada(request):
     new_user = request.POST["new-user"]

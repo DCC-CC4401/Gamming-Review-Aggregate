@@ -8,54 +8,181 @@
 <div class="content">
   <div class="container">
     <div class="main">
-      <p>¿Tienes una cuenta? Conéctate con tu cuenta</p>
+      <p> ¿Tienes una cuenta? Conéctate con tu cuenta</p>
 
+      <!-- ajax sobre el formulario de login -->
+      <script>
+        // Deshabilitamos los botones al cargar la página
+        // Si lo hacemos antes de la carga, no se podrán habilitar nuevamente
+        $(document).ready(function() {disable_buttons();});
+
+        // Verificador de nombre de usuario del login
+        $(document).ready(function(){
+          $("input[id=user]").change(function(){    // Añadimos un listener en el input
+            var user = $("input[id=user]").val();   // Guardamos el usuario
+            $.ajax({    // AJAX
+              url: '/login/validate_user_login/',   // url para el ajax
+              data: {'username': user},   
+              // Guardamos el input en un json para la funcion validate_user_login en views.py
+              dataType: 'json',
+              success: function (data) {
+                if (data.invalid_user) {
+                  disable_buttons();
+                }
+                else {
+                  able_button_login();
+                }
+              }
+            });
+          });
+        });
+
+        // Verificador de contraseña de login
+        $(document).ready(function(){
+          $("input[id=passw]").change(function(){    // Añadimos un listener en el input
+            var passw = $("input[id=passw]").val(); // Guardamos la passw
+            $.ajax({    // AJAX
+              url: '/login/validate_passw_login/',   // url para el ajax
+              data: {'passw': passw},   
+              // Guardamos el input en un json para la funcion validate_passw_login en views.py
+              dataType: 'json',
+              success: function (data) {
+                if (data.invalid_passw) {
+                  disable_buttons();
+                }
+                else {
+                  able_button_login();
+                }
+              }
+            });
+          });
+        });
+      </script>
+
+      <!-- Formulario de Login -->
       <h3>Login</h3>
       <div class="formulario">
-        <form action="" method="post">
+        <form id="login-form" method="post">
           {% csrf_token %}
           <div class="entrada">
             <div class="leyenda" >Usuario</div>
-            <input type="text" id="user" name="user" size=100 placeholder= "Ingresa tu usuario">
+            <input type="text" id="user" name="user" size=100 placeholder= "Ingrese su usuario">
           </div>
           <div class="entrada">
             <div class="leyenda" >Contraseña</div>
-            <input type="password" id="passw" name="passw" size=100 placeholder= "Ingresa tu contraseña">
+            <input type="password" id="passw" name="passw" size=100 placeholder= "Ingrese su contraseña">
           </div>
 
-          <!-- Botón de envío-->
+          <!-- Botón de envío de Login -->
           <div class="entrada">
-            <button class="main-button" type="submit">Conectarse</button>
+            <button class="main-button" type="submit" id="login-button">Conectarse</button>
           </div>
         </form>
       </div>
-    </div>
 
+    </div>
 
     <div class="aside">
       <p>¿No tienes un cuenta? Crea una cuenta</p>
 
+      <!-- ajax sobre el formulario de crear cuenta -->
+      <script>
+        // Verificador de nombre de usuario
+        $(document).ready(function(){
+          $("input[id=new-user]").change(function(){      // Añadimos un listener en el input (change)
+            var new_user = $("input[id=new-user]").val(); // Guardamos la entrada para verificarla
+            $.ajax({    // AJAX
+              url: '/login/validate_username/',   // url para el ajax
+              data: {'username': new_user},   
+              // Guardamos el input en un json para la función validate_username en views.py
+              dataType: 'json',
+              success: function (data) {
+                // Si existe el nombre de usuario ya existe
+                if (data.is_taken) {
+                  username_used();
+                }
+                else{
+                  username_not_used();
+                  able_button_create();
+                }
+              }
+            });
+          });
+        });
+
+        // Verificador de contraseña 1
+        $(document).ready(function(){
+          $("input[id=new-passw1]").change(function(){        // Añadimos un listener en la contraseña (change)
+            var new_passw1 = $("input[id=new-passw1]").val(); // Guardamos la entrada para verificarla
+            $.ajax({    // AJAX
+              url: '/login/validate_password/',   // url para el ajax
+              data: {'password': new_passw1},   
+              // Guardamos el input en un json para la función validate_password en views.py
+              dataType: 'json',
+              success: function (data) {
+                // Si existe el nombre de usuario ya existe
+                if (data.is_invalid) {
+                  invalid_password();
+                }
+                else{
+                  valid_password();
+                  able_button_create();
+                }
+              }
+            });
+          });
+        });
+
+        // Verificador de contraseña 2
+        $(document).ready(function(){
+          $("input[id=new-passw2]").change(function(){        // Añadimos un listener en la contraseña (change)
+            var new_passw1 = $("input[id=new-passw1]").val(); // Guardamos la entrada para verificarla
+            var new_passw2 = $("input[id=new-passw2]").val(); // Guardamos la entrada para verificarla
+            $.ajax({    // AJAX
+              url: '/login/validate_both_passwords/',   // url para el ajax
+              data: {'password1': new_passw1, 'password2': new_passw2},   
+              // Guardamos el input en un json para la función validate_both_passwords en views.py
+              dataType: 'json',
+              success: function (data) {
+                // Si existe el nombre de usuario ya existe
+                if (data.is_invalid) {
+                  both_invalid_passwords();
+                }
+                else{
+                  both_valid_passwords();
+                  able_button_create();
+                }
+              }
+            });
+          });
+        });
+      </script>
+
+      <!-- Formulario de Creación de Cuenta -->
       <h3>Creación de cuenta</h3>
       <div class="formulario">
-        <form action="cuenta-creada/" method="post">
+        <form id="form-create" action="cuenta-creada/" method="post">
           {% csrf_token %}
           <div class="entrada">
-            <div class="leyenda" >Nombre de usuario</div>
-            <input type="text" id="new-user" name="new-user" size=100 placeholder= "Ingresa tu usuario">
+            <div class="leyenda" id="new-user-leyend">Nombre de usuario</div>
+            <input type="text" id="new-user" name="new-user" size=100 placeholder= "Ingrese su usuario">
+            <div class="leyenda-none" id="new-user-msj"> El nombre de usuario ya existe </div>
           </div>
+          <div class="entrada"></div>
           <div class="entrada">
             <div class="leyenda" >Escribe una constraseña</div>
-            <input type="password" id="new-passw1" name="new-passw1" size=100 placeholder= "Ingresa tu contraseña">
+            <input type="password" id="new-passw1" name="new-passw1" size=100 placeholder= "Ingrese su contraseña">
+            <div class="leyenda-none" id="new-passw1-msj"> La contraseña ingresada no es válida </div>
           </div>
-
           <div class="entrada">
             <div class="leyenda" >Vuelve a escribir tu contraseña</div>
-            <input type="password" id="new-passw2" name="new-passw2" size=100 placeholder= "Reingresa tu contraseña">
+            <input type="password" id="new-passw2" name="new-passw2" size=100 placeholder= "Re-ingrese su contraseña">
+            <div class="leyenda-none" id="new-passw2-msj"> La contraseña ingresada no es válida </div>
           </div>
 
-          <!-- Botón de envío-->
+          <!-- Botón de envío de Creación de Cuenta -->
           <div class="entrada">
-            <button class="main-button" type="submit">Crear cuenta</button>
+            <button class="main-button" type="submit" id="create-boton">Crear cuenta</button>
           </div>
         </form>
       </div>

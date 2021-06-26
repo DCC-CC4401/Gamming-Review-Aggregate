@@ -109,6 +109,19 @@ th, td {
   text-decoration: none;
 }
 
+.secondary-button:disabled,
+button[disabled]{
+  font-size: 1em;
+  background-color: white;
+  color: black;
+  border: 2px solid rgba(100,100,200,1);
+  border-radius: 5px;
+  padding: 2px 5px;
+  transition-duration: 0.2s;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
 .secondary-button:hover {
   background-color: white;
   color: black;
