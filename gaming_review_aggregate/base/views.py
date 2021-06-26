@@ -8,21 +8,6 @@ from base.models import User, Game, Review, Friend_Request, Genre, GameMedia
 import hashlib
 
 
-
-plataforms = ["Android", "Arcade", "Atari",
-        "Game Boy", "Game Boy Advance", "Game Boy Color",
-        "Nintendo 3DS", "Nintendo 64", "Nintendo DS", "Nintendo DSi",
-        "Nintendo Entertainment System (NES)", "Nintendo GameCube",
-        "Nintendo Switch", "PC", "PlayStation", "PlayStation 2", "PlayStation 3",
-        "PlayStation 4", "PlayStation 5", "PlayStation Portable (PSP)", "Sega",
-        "Super Nintendo Entertainment System (SNES)", "Wii", "Wii U",
-        "Xbox", "Xbox 360", "Xbox One", "Xbox Series", "Other"
-        ]
-
-genres = ["Action", "Adventure", "Fighting", "Platform",
-        "Puzzle", "Racing", "Role-playing", "Shooter", "Simulation",
-        "Sports", "Strategy", "Other"]
-
 games = Game.objects.all()
 users = User.objects.all()
 reviews = Review.objects.all()
@@ -31,9 +16,10 @@ genre = Genre.objects.all()
 fotos = GameMedia.objects.all()
 
 def home(request): #the homepage view
-    top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio')
+    top_games = Game.objects.all().order_by('-promedio')
     if request.method == "GET":
         return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
+
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -61,18 +47,67 @@ def user_login(request): #the login view
             print("invalid login details " + username + " " + contraseña)
             return HttpResponseRedirect('/login')
 
+
 def user_logout(request):
     logout(request)
     # Redirect back to index page.
     return render(request, "base/resultados/sesion-cerrada.html")
 
+
 def popular_games(request): # the popular games view
     if request.method == "GET":
-        return render(request, "base/nav-bar/popular-games.html", {"genres" : genre, "games": games, "fotos": fotos})
+
+
+        # Dado un game, calcula su puntaje promedio
+        def score(game):
+            reviews = Review.objects.filter(game=game)
+            try:
+                prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+            except:
+                prom = 0.0
+            return prom
+
+
+        # Clase que representa un objeto que contiene la información de un juego
+        # que se va a mostrar en el listado de juegos
+        class GameL:
+            def __init__(self, game_id, name, plat, genres, score,foto):
+                self.id = game_id
+                self.name = name
+                self.plataforma = plat
+                self.genres = genres
+                self.score = score
+                self.foto = foto
+
+        def getGameL(game):
+            game_id = game.id
+            game_name = game.nombre
+            game_plat = game.plataforma
+            game_genres = Genre.objects.filter(game=game)
+            game_score = score(game)
+            game_foto = GameMedia.objects.filter(game=game)[0].path
+
+            return GameL(
+                    game_id,
+                    game_name,
+                    game_plat,
+                    game_genres,
+                    game_score,
+                    game_foto
+                    )
+
+
+        # armar una lista que contienen objetos con la información necesaria
+        # Para mostrar listado de todos los juegos
+        game_list = list(map(getGameL, games))
+
+        return render(request, "base/nav-bar/popular-games.html", {"games": game_list })
+
 
 def add_game(request): #the add game form view
     if request.method == "GET":
-        return render(request, "base/nav-bar/agregar-juego.html", {"plataforms": plataforms, "genres": genres})
+        return render(request, "base/nav-bar/agregar-juego.html")
+
 
 def buscar(request):
     buscado = request.GET["search"]
@@ -83,6 +118,7 @@ def buscar(request):
         #return render(request, "base/buscar-nombre.html", {"buscado": nombre, "resultados": resultados})
 
         return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
+
 
 def juegoAgregado(request):
     nombre = request.POST["nombre"]
@@ -101,17 +137,15 @@ def juegoAgregado(request):
     for g in gen:
         add_g = Genre.objects.create(name = g, game= game)
 
-    # Se agrega foto a la base de datos
+    # Se guarda la imagen con un nombre 
     total_images = GameMedia.objects.all().count()
-
     hash_archivo = str(total_images) + hashlib.sha256(
             foto.name.encode()).hexdigest()[0:30]
-
     file_path = './base/static/media/' + hash_archivo
-
     with open(file_path, 'wb') as image: 
         image.write(foto.file.read())
 
+    # Se guarda la foto en la base de datos
     foto = GameMedia.objects.create(nombre = foto.name, path = hash_archivo, game = game)
 
     dic = {"nombre": nombre,
@@ -126,23 +160,28 @@ def juegoAgregado(request):
     if request.method == "POST":
         return render(request, "base/resultados/juego-agregado.html", dic)
 
+
 def perfilJuego(request):
-    nombre = request.GET["nombre"]
-    resultado = Game.objects.filter(id=nombre)
-    reviews = Review.objects.filter(game=nombre)
-    generos = Genre.objects.filter(game=nombre)
-    foto = GameMedia.objects.filter(game=nombre)
-    try:
-        prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
-    except:
-        prom = 0.0
-    resultado.update(promedio=prom)
     if request.method == "GET":
+        nombre = request.GET["nombre"]
+        resultado = Game.objects.filter(id=nombre)
+        if (len(resultado)==0):
+            return render(request, "base/resultados/perfil-juego.html", {"bol": 0})
+        reviews = Review.objects.filter(game=nombre)
+        generos = Genre.objects.filter(game=nombre)
+        foto = GameMedia.objects.filter(game=nombre)
+        try:
+            prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+        except:
+            prom = 0.0
+        resultado.update(promedio=prom)
+ 
         return render(request, "base/resultados/perfil-juego.html", {
-            "game": resultado, 
+            "game": resultado[0], 
             "reviews": reviews,
             "generos": generos,
             "foto": foto[0],
+            "bol": 1,
             "prom": prom}
             )
 

@@ -2,6 +2,15 @@ let genres = ["Action", "Adventure", "Fighting", "Platform",
         "Puzzle", "Racing", "Role-playing", "Shooter", "Simulation",
         "Sports", "Strategy", "Other"];
 
+let plataforms = ["Android", "Arcade", "Atari",
+            "Game Boy", "Game Boy Advance", "Game Boy Color",
+            "Nintendo 3DS", "Nintendo 64", "Nintendo DS", "Nintendo DSi",
+            "Nintendo Entertainment System (NES)", "Nintendo GameCube",
+            "Nintendo Switch", "PC", "PlayStation", "PlayStation 2", "PlayStation 3",
+            "PlayStation 4", "PlayStation 5", "PlayStation Portable (PSP)", "Sega",
+            "Super Nintendo Entertainment System (SNES)", "Wii", "Wii U",
+            "Xbox", "Xbox 360", "Xbox One", "Xbox Series", "Other"];
+
 let large = 0;
 let large_genres = genres.length;
 function addOptions(genre, num, v1, v2, value){
@@ -35,7 +44,17 @@ function addOptions(genre, num, v1, v2, value){
             }
         }
     }
+}
 
+let large_plats = plataforms.length;
+
+function addPlataforms(){
+    let plats = document.getElementById('plat');
+    for (let i = 0; i < large_plats; i++){
+        let option = document.createElement("option");
+        option.text = plataforms[i];
+        plats.add(option);
+    }
 }
 
 function addgenre(){

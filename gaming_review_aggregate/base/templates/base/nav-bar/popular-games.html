@@ -13,26 +13,26 @@
   {% for game in games %}
     <div class="container">
       <div class="main">
-        {% for foto in fotos %}
-          {% if foto.game.id == game.id %}
-            <img class="responsive-img" src="../../static/media/{{foto.path}}" alt="">
-          {% endif %}
-        {% endfor %}
+        <img class="responsive-img" src="../../static/media/{{game.foto}}" alt="">
  
       </div>
       <div class="aside">
-        <p>Nombre: <b>  <a href="/perfil-juego/?nombre={{game.id}}">{{game.nombre}}</a></b></p>
-        <p>Año: <b>{{game.anio}}</b></p>
-        <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
-        <p>Plataforma: <b>{{game.plataforma}}</b></p>
+        <p>Nombre: 
+        <b><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a></b></p>
+
+        <p>Plataforma: 
+        <b>{{game.plataforma}}</b></p>
+
         <p>Géneros: 
-        {% for genre in genres %}
-        {% if genre.game.id == game.id %}
+        {% for genre in game.genres %}
         <b> {{genre.name}}</b>
-        {% endif %}
         {% endfor %}
         </p>
-        <p>Descripción: <b>{{game.descripcion}}</b></p>
+
+        <p>Puntaje promedio: 
+        <b>{{game.score}} de 5.0</b></p>
+
+
       </div>
     </div>
     <hr>
