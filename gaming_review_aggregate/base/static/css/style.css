@@ -60,6 +60,27 @@ th, td {
 	border-bottom: 1px solid #ddd;
 }
 
+a:link{
+  text-decoration: none;
+  color: rgb(80,80,200);
+}
+
+a:visited{
+  text-decoration: none;
+  color: rgb(150,150,200);
+}
+
+a:hover{
+  text-decoration: none;
+  color: rgb(120,120,120);
+}
+
+a:active{
+  text-decoration: none;
+  color: rgb(100,100,100);
+}
+
+
 .main-link {
   padding: 15px 30px;
   border: 1px solid rgba(100,100,200,1);
@@ -180,11 +201,10 @@ Layout styles
  */
 
 .content {
-  margin-top: 4.1em;
+  margin-top: 3em;
   width:100%;
   overflow: hidden;
 }
-
 
 .container{
   width: 95%;
@@ -251,7 +271,7 @@ Wide styles
 
   .content {
     padding: 1em 1.25em;
-    margin-top: 9em;
+    margin-top: 11em;
   }
   .container{
     display:block;

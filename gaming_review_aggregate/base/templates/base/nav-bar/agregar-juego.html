@@ -2,6 +2,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="../../static/css/agregar-juego.css">
+<script src="../../static/js/agregar-juegos.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -11,12 +12,12 @@
         <p>¿No encontaste tu juego favorito? ¡Agrégalo a la página!</p>
         <h3>Agregar juego nuevo</h3>
         <div class="formulario">
-          <form action="/juego-agregado/" method="post" >
+          <form action="/juego-agregado/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="entrada">
               <div class="leyenda" >Nombre del juego</div>
-              <input type="text" required id="nombre" name="nombre" size=100 placeholder= "Ingresa el nombre del juego">
+              <input type="text" required id="nombre" name="nombre" size=100 placeholder= "Ingrese su usuario">
             </div>
 
             <div class="entrada">
@@ -31,7 +32,7 @@
 
             <div class="entrada">
               <div class="leyenda">Desarrollador</div>
-              <input type="text" required id="dev" name="dev" size=100 placeholder= "Ingresa el nombre del desarrollador">
+              <input type="text" required id="dev" name="dev" size=100 placeholder= "Ingrese nombre del desarrollador">
             </div>
 
             <div class="entrada">
@@ -45,10 +46,7 @@
 
             <div class="entrada">
               <div class="leyenda">Géneros</div>
-              <select id="gen" name="gen">
-                {% for option in genres %}
-                <option> {{option}} </option>
-                {% endfor %}
+              <select id="gen1" name="gen" onchange="changeGenres(1)">
               </select>
 
               <div id="addgenre2" style="display: inline;"></div>
@@ -57,31 +55,16 @@
 
               <button type="button" class="secondary-button" onclick="addgenre()" id="add-genre-button" style="display: inline;"> Agregar Género </button>
             </div>
-
-            <!-- Script para el botón de agregar generos -->
             <script>
-              function addgenre(){
-                let num = document.getElementsByName('gen').length;
-                if (num == 1){
-                  let genre2 = document.getElementById('addgenre2');
-                  genre2.innerHTML = '<select id="gen2" name="gen">\n' +
-                  '                    {% for option in genres %}\n' +
-                  '                    <option> {{option}} </option>\n' +
-                  '                    {% endfor %}\n' +
-                  '                  </select>';
-                }
-                else if (num == 2) {
-                  let genre3 = document.getElementById('addgenre3');
-                  genre3.innerHTML = '<select id="gen3" name="gen">\n' +
-                  '                    {% for option in genres %}\n' +
-                  '                    <option> {{option}} </option>\n' +
-                  '                    {% endfor %}\n' +
-                  '                  </select>';
-                  let boton = document.getElementById("add-genre-button");
-                  boton.setAttribute("style", "display:none");
-                }
-              }
+              addgenre();
             </script>
+
+            <div class="entrada">
+              <div class="leyenda">Imagen</div>
+              <input type="file" accept ="image/png, image/jpeg" id="foto" name="foto">
+            </div>
+
+
 
             <!-- Botón de envío-->
             <div class="entrada">
