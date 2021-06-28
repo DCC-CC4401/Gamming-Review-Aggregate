@@ -230,18 +230,20 @@ def send_friend_request(request, userID): # Vista para mandar una nueva solicitu
     to_user = User.objects.get(id=userID)
     friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
     if created:
-        return HttpResponse('friend request sent')
+        return render(request, "base/resultados/solicitud-enviada.html", {"user": from_user, "to_user": to_user})
     else:
         return HttpResponse('friend request was already sent')
 
 @login_required
 def accept_friend_request(request, requestID): # Vista para aceptar una solicitud de amistad pendiente
     friend_request = Friend_Request.objects.get(id=requestID)
-    if friend_request.to_user == request.user:
-        friend_request.to_user.friends.add(friend_request.from_user)
-        friend_request.from_user.friends.add(friend_request.to_user)
+    this_user = friend_request.to_user
+    that_user = friend_request.from_user
+    if this_user == request.user:
+        this_user.friends.add(that_user)
+        that_user.friends.add(this_user)
         friend_request.delete()
-        return HttpResponse('friend request accepted')
+        return render(request, "base/resultados/solicitud-aceptada.html", {"user": this_user, "to_user": that_user})
     else:
         return HttpResponse('friend request not accepted')
 ##
