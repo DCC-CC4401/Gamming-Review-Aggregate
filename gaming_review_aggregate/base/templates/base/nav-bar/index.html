@@ -37,20 +37,24 @@
 
 
     <div class="aside">
-      <h3>Quizás conozcas a:</h3>
-      <table class="table table-striped">
-        <tbody>
-          {% for user in users %}
-          {% if not user.is_superuser and user.username != 'Anonimo'%}
-          {% if user not in request.user.friends.all and user != request.user %}
-          <tr>
-            <td>{{user}}<br><a href="/perfil_publico/?nombre={{user.id}}">Ver Perfil</a></td>
-          </tr>
-          {% endif %}
-          {% endif %}
-          {% endfor %}
-        </tbody>
-      </table>
+      {% if user.is_authenticated %}
+        <h3>Quizás conozcas a:</h3>
+          <table class="table table-striped">
+            <tbody>
+              {% for user in users %}
+              {% if not user.is_superuser and user.username != 'Anonimo'%}
+              {% if user not in request.user.friends.all and user != request.user %}
+              <tr>
+                <td>{{user}}<br><a href="/perfil_publico/?nombre={{user.id}}">Ver Perfil</a></td>
+              </tr>
+              {% endif %}
+              {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
+      {% else %}
+        <h3>Inicia sesión para conocer amigos nuevos.</h3>
+      {% endif %}
     </div>
   </div>
 </div>

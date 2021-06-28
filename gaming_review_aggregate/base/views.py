@@ -18,9 +18,10 @@ fotos = GameMedia.objects.all() # Todas las fotos (de juegos) de la base de dato
 
 
 def home(request): # Vista de la página de home
-    top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio') # Filtra los mejores juegos
+    top_games = games.order_by('-promedio')[:5] # Filtra los mejores juegos
+    game_list = list(map(createGameL, top_games)) # Mapea la lista de mejores juegos
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
+        return render(request, "base/nav-bar/index.html", { "games": game_list, "users": users})
 
 
 ## Vistas de login
@@ -148,8 +149,8 @@ def perfil(request): # Vista de la página del perfil del usuario activo
     except:
         foto = UserMedia.objects.filter(path="../../static/img/chinita.jpeg") # Arreglar
 
-    reviews = Review.objects.filter(author=this_user) # Filtra las reseñas hechas por el usuario
-    reviews = list(map(createReviewU, reviews))
+    this_reviews = Review.objects.filter(author=this_user) # Filtra las reseñas hechas por el usuario
+    reviews = list(map(createReviewU, this_reviews))
 
     if request.method == "GET":
         return render(request, "base/perfil-usuario.html", {
@@ -165,11 +166,24 @@ def perfil(request): # Vista de la página del perfil del usuario activo
 def perfilPublico(request): # Vista de la página del perfil de un usuario en modo público
     user_search = request.GET["nombre"]
     that_user = users.filter(id=user_search) # Filtra entre los usuarios para obtener el usuario deseado
+    try:
+        that_foto = UserMedia.objects.filter(user=that_user)[0] # Filtra la foto de este usuario
+    except:
+        that_foto = UserMedia.objects.filter(path="../../static/img/chinita.jpeg") # Arreglar
+
+    that_reviews = Review.objects.filter(author=that_user[0]) # Filtra las reseñas hechas por el usuario
+    reviews = list(map(createReviewU, that_reviews))
+
     if request.method == "GET":
-        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user,"users": users})
+        return render(request, "base/perfil-publico.html", {
+            "reviews": reviews,
+            "this_user": request.user,
+            "that_user": that_user,
+            "foto": that_foto,
+            "users": users})
 
     elif request.method == "POST":
-        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user, "users": users})
+        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user, "foto": that_foto, "users": users})
 
 def editar_perfil(request): # Vista de la página para editar el perfil del usuario
     if request.method == "GET":

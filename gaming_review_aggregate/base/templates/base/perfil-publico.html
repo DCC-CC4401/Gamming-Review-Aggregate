@@ -25,27 +25,34 @@
         {% endfor %}
     </div>
   </div>
+
   <div class="container">
     <div class="reviews">
         {% for user in that_user %}
             <h3>Reviews hechas por {{user}}</h3>
-            {% for review in reviews %}
-                {% if review.author.username == user.username %}
-                <table>
-                    <tr>
-                    <td>Juego: <b>{{review.game.nombre}}</b></td>
-                </tr>
-                <tr>
-                    <td>Puntaje: <b>{{review.score}}</b></td>
-                </tr>
-                <tr>
-                    <td>Reseña: <b>{{review.body}}</b></td>
-                </tr>
-                </table>
-                {% endif %}
-            {% endfor %}
         {% endfor %}
     </div>
   </div>
+    {% for review in reviews %}
+      <div class="container">
+        <div class="main">
+          <img class="responsive-img" src="../../static/media/{{review.foto}}" alt="">
+        </div>
+
+        <div class="aside">
+          <p><b><a href="/perfil-juego/?nombre={{review.id_game}}">{{review.name_game}}</a></b></p>
+
+          <p>Plataforma:
+          <b>{{review.plataforma_game}}</b></p>
+
+          <p>Puntaje:
+          <b>{{review.review_score}}</b></p>
+
+          <p>Reseña:
+          <b>{{review.review_des}}</b></p>
+
+        </div>
+    </div>
+    {% endfor %}
 </div>
 {% endblock %}
