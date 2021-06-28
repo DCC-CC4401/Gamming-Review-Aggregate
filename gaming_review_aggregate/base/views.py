@@ -35,10 +35,37 @@ class GameL:
         self.score = game.promedio
         self.foto = GameMedia.objects.filter(game=game)[0].path
 
+# Función para crear un objeto de la clase GameL dado un juego
 def createGameL(game):
     gameL = GameL()
     gameL.setAttributes(game)
     return gameL
+
+# Clase que representa un objeto que contiene la información de una review
+# que se va a mostrar en el listado de reviews de un usuario 
+class ReviewU:
+    def __init__(self):
+        self.id_game = 0
+        self.name_game = 0
+        self.plataforma_game = 0
+        self.foto= 0
+        self.review_score = 0
+        self.review_des = 0
+
+    def setAttributes(self, review):
+        game = review.game
+        self.id_game = game.id
+        self.name_game = game.nombre
+        self.plataforma_game = game.plataforma
+        self.foto = GameMedia.objects.filter(game=game)[0].path
+        self.review_score = review.score
+        self.review_des= review.body
+
+# Función para crear un objeto de la clase ReviewU dado una review
+def createReviewU(review):
+    reviewU= ReviewU()
+    reviewU.setAttributes(review)
+    return reviewU 
 
 def home(request): #the homepage view
     top_games = Game.objects.all().order_by('-promedio')[:5]
@@ -260,6 +287,8 @@ def perfil(request): #the homepage view
     this_user = request.user
     this_friend_requests = Friend_Request.objects.filter(to_user=this_user)
     foto = UserMedia.objects.filter(user=this_user)[0]
+    reviews = Review.objects.filter(author=this_user)
+    reviews = list(map(createReviewU, reviews))
     if request.method == "GET":
         return render(request, "base/perfil-usuario.html", {
             "reviews": reviews, 
