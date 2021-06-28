@@ -35,7 +35,8 @@
             <button class="main-link" type="button"> Agregar Reseña </button> 
           </a>
         </li>
-        <li><form action='/nombre-buscado/'  id='search-form' method='get'>
+        <li>
+          <form action='/nombre-buscado/'  id='search-form' method='get'>
             <input id="search" name='search' placeholder='Ingresa un nombre' type='text'/>
             <input id='button-submit' type='submit' value='Buscar'/>
           </form>
@@ -43,7 +44,7 @@
         {% if user.is_authenticated %}
           <li>
             <a href="/perfil">
-              <button class="main-link" type="button"> Perfil </button> 
+              <button class="main-link" type="button"> {{user}}</button> 
             </a>
           </li>
         {% else %}

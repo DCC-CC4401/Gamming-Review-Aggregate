@@ -9,16 +9,28 @@
   </div>
   <div class="container">
     <div class="main">
-      <h3>Top de juegos mejor calificados:</h3>
+      <h3>Top 5 de juegos mejor calificados:</h3>
       <table class="table table-striped">
         <tbody>
-          {% for juego in games %}
+          {% for game in games %}
           <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
+            <td><img class="responsive-img" src="../../static/media/{{game.foto}}" alt=""></td>
             <td>
-              <h4><a href="/perfil-juego/?nombre={{juego.id}}">{{juego.nombre}}</a> </h4>
-              <p>Puntaje: {{juego.promedio}}</p>
-              <p>{{juego.descripcion}}</p>
+              <h4><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a> </h4>
+              <p>Plataforma: 
+              <b>{{game.plataforma}}</b></p>
+
+              <p>Géneros: 
+              {% for genre in game.genres %}
+              <b> {{genre.name}}</b>
+              {% endfor %}
+              </p>
+
+              <p>Puntaje promedio: 
+              <b>{{game.score}} de 5.0</b></p>
+
+
+
             </td>
           </tr>
           {% endfor %}

@@ -4,8 +4,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.db.models import Q, Avg
-from base.models import User, Game, Review, Friend_Request, Genre, GameMedia
+from base.models import User, Game, Review, Friend_Request, Genre, GameMedia, UserMedia
 import hashlib
+from os import remove
 
 
 games = Game.objects.all()
@@ -15,11 +16,36 @@ friend_requests = Friend_Request.objects.all()
 genre = Genre.objects.all()
 fotos = GameMedia.objects.all()
 
-def home(request): #the homepage view
-    top_games = Game.objects.all().order_by('-promedio')
-    if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
+# Clase que representa un objeto que contiene la información de un juego
+# que se va a mostrar en el listado de juegos
+class GameL:
+    def __init__(self):
+        self.id = 0
+        self.name = 0
+        self.plataforma = 0
+        self.genres = 0
+        self.score = 0
+        self.foto = 0
 
+    def setAttributes(self, game):
+        self.id = game.id
+        self.name = game.nombre
+        self.plataforma = game.plataforma
+        self.genres = Genre.objects.filter(game=game)
+        self.score = game.promedio
+        self.foto = GameMedia.objects.filter(game=game)[0].path
+
+def createGameL(game):
+    gameL = GameL()
+    gameL.setAttributes(game)
+    return gameL
+
+def home(request): #the homepage view
+    top_games = Game.objects.all().order_by('-promedio')[:5]
+    game_list = list(map(createGameL, top_games))
+
+    if request.method == "GET":
+        return render(request, "base/nav-bar/index.html", { "games": game_list, "users": users})
 
 def user_login(request): #the login view
     if request.method == "GET":
@@ -57,49 +83,9 @@ def user_logout(request):
 def popular_games(request): # the popular games view
     if request.method == "GET":
 
-
-        # Dado un game, calcula su puntaje promedio
-        def score(game):
-            reviews = Review.objects.filter(game=game)
-            try:
-                prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
-            except:
-                prom = 0.0
-            return prom
-
-
-        # Clase que representa un objeto que contiene la información de un juego
-        # que se va a mostrar en el listado de juegos
-        class GameL:
-            def __init__(self, game_id, name, plat, genres, score,foto):
-                self.id = game_id
-                self.name = name
-                self.plataforma = plat
-                self.genres = genres
-                self.score = score
-                self.foto = foto
-
-        def getGameL(game):
-            game_id = game.id
-            game_name = game.nombre
-            game_plat = game.plataforma
-            game_genres = Genre.objects.filter(game=game)
-            game_score = score(game)
-            game_foto = GameMedia.objects.filter(game=game)[0].path
-
-            return GameL(
-                    game_id,
-                    game_name,
-                    game_plat,
-                    game_genres,
-                    game_score,
-                    game_foto
-                    )
-
-
         # armar una lista que contienen objetos con la información necesaria
-        # Para mostrar listado de todos los juegos
-        game_list = list(map(getGameL, games))
+        # para mostrar listado de todos los juegos
+        game_list = list(map(createGameL, games))
 
         return render(request, "base/nav-bar/popular-games.html", {"games": game_list })
 
@@ -261,6 +247,10 @@ def cuentaCreada(request):
     #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
     user = User.objects.create_user(username=new_user, nombre=new_user, password=new_password1)
     users.update()
+
+    user_media = UserMedia.objects.create(nombre="no",path="no",user=user)
+
+
     if request.method == "POST":
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
@@ -269,8 +259,14 @@ def cuentaCreada(request):
 def perfil(request): #the homepage view
     this_user = request.user
     this_friend_requests = Friend_Request.objects.filter(to_user=this_user)
+    foto = UserMedia.objects.filter(user=this_user)[0]
     if request.method == "GET":
-        return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user,"users": users})
+        return render(request, "base/perfil-usuario.html", {
+            "reviews": reviews, 
+            "friend_requests": this_friend_requests, 
+            "user": request.user,
+            "foto": foto,
+            "users": users})
 
     elif request.method == "POST":
         return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user, "users": users})
@@ -283,12 +279,32 @@ def perfil_actualizado(request):
     edit_edad = request.POST["edad"]
     edit_correo = request.POST["correo"]
     edit_descripcion_usuario = request.POST["descripcion_usuario"]
+    foto = request.FILES["foto"]
 
     usuario = request.user
     usuario.edad = edit_edad
     usuario.email = edit_correo
     usuario.descripcion = edit_descripcion_usuario
     usuario.save(update_fields=["edad","email","descripcion"])
+
+    user_media = UserMedia.objects.filter(user=usuario)[0]
+
+    # Se guarda la imagen con un nombre 
+    foto_name = foto.name
+    hash_archivo = str(user_media.id) + hashlib.sha256(
+            foto_name.encode()).hexdigest()[0:30]
+    file_path = './base/static/user-media/' + hash_archivo
+    with open(file_path, 'wb') as image: 
+        image.write(foto.file.read())
+
+    user_media_path = user_media.path
+    if (user_media_path != "no"):
+        remove('./base/static/user-media/' + user_media_name)
+
+    user_media.nombre = foto_name
+    user_media.path  = hash_archivo
+    user_media.save(update_fields=["nombre","path"])
+
     return redirect('perfil/')
 
 def add_review(request): #the add game form view

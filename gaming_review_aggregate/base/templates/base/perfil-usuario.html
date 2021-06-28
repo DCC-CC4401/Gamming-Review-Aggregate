@@ -1,14 +1,19 @@
 {% extends "base/main-template.html" %}
 
 {% block head %}
-<link rel="stylesheet" href="../../static/css/juego.css">
+<link rel="stylesheet" href="../../static/css/perfil-usuario.css">
 {% endblock %}
 
 {% block content %}
 <div class="content">
   <div class="container">
     <div class="main">
-      <img class="responsive-img" src="../../static/img/chinita.jpeg" alt="">
+      {% ifequal foto.path "no" %}
+        <img class="responsive-img" src="../../static/img/chinita.jpeg" alt="">
+      {% else %}
+      <img class="responsive-img" src="../../static/user-media/{{foto.path}}" alt="">
+    {% endifequal %}
+
     </div>
 
     <div class="aside">
@@ -28,7 +33,12 @@
     <div class="friend_requests">
       <h3>Solicitudes de amistad pendientes</h3>
       {% for friend_request in friend_requests %}
-        {{friend_request.from_user}}<br><a href="/accept_friend_request/{{friend_request.id}}/">accept friend request</a>
+      {{friend_request.from_user}} <br>
+        <a href="/accept_friend_request/{{friend_request.id}}/">
+        <button class="friend_request-button" type="button"> Agregar amigo</button>
+      </a>
+ 
+        
       {% endfor %}
     </div>
   </div>
