@@ -6,7 +6,7 @@
 {% block content %}
 <div class="content">
   <div class="container">
-    <h3>{{user}}, has aceptado la solicitud de amistad de {{to_user}}. ¡Ahora son amigos!</h3>
+    <h3>¡Ya habías enviado solicitud a {{to_user}}! Espera a que la acepte.</h3>
   </div>
   <div class="container">
     <h4>Serás redireccionado en 5 segundos...</h4>
@@ -14,7 +14,7 @@
 </div>
 <script>
   setTimeout(function(){
-       window.location.href = '/perfil';
+       window.location.href = '/perfil_publico/?nombre={{to_user.id}}';
     }, 5000);
 </script>
 {% endblock %}

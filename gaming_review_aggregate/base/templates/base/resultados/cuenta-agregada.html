@@ -8,5 +8,13 @@
   <div class="container">
     <h3>Bienvenido {{user}}, tu cuenta fue creada con éxito.</h3>
   </div>
+  <div class="container">
+    <h4>Serás redireccionado en 5 segundos...</h4>
+  </div>
 </div>
+<script>
+  setTimeout(function(){
+       window.location.href = '/login';
+    }, 5000);
+</script>
 {% endblock %}

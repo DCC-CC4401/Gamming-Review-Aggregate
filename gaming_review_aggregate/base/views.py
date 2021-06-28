@@ -232,7 +232,7 @@ def send_friend_request(request, userID): # Vista para mandar una nueva solicitu
     if created:
         return render(request, "base/resultados/solicitud-enviada.html", {"user": from_user, "to_user": to_user})
     else:
-        return HttpResponse('friend request was already sent')
+        return render(request, "base/resultados/solicitud-errada.html", {"user": from_user, "to_user": to_user})
 
 @login_required
 def accept_friend_request(request, requestID): # Vista para aceptar una solicitud de amistad pendiente
