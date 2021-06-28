@@ -129,6 +129,8 @@ def cuentaCreada(request): # Vista de la página de cuenta creada exitosamente
     user = User.objects.create_user(username=new_user, nombre=new_user, password=new_password1)
     users.update()
 
+    user_media = UserMedia.objects.create(nombre="no",path="no",user=user)
+
     if request.method == "POST":
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
@@ -165,25 +167,27 @@ def perfil(request): # Vista de la página del perfil del usuario activo
 
 def perfilPublico(request): # Vista de la página del perfil de un usuario en modo público
     user_search = request.GET["nombre"]
-    that_user = users.filter(id=user_search) # Filtra entre los usuarios para obtener el usuario deseado
-    try:
-        that_foto = UserMedia.objects.filter(user=that_user)[0] # Filtra la foto de este usuario
-    except:
-        that_foto = UserMedia.objects.filter(path="../../static/img/chinita.jpeg") # Arreglar
+    that_user = User.objects.filter(id=user_search)[0]
+    this_user = request.user
 
-    that_reviews = Review.objects.filter(author=that_user[0]) # Filtra las reseñas hechas por el usuario
-    reviews = list(map(createReviewU, that_reviews))
-
-    if request.method == "GET":
-        return render(request, "base/perfil-publico.html", {
-            "reviews": reviews,
-            "this_user": request.user,
-            "that_user": that_user,
-            "foto": that_foto,
-            "users": users})
-
-    elif request.method == "POST":
-        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user, "foto": that_foto, "users": users})
+    if(that_user.id == this_user.id):
+        return perfil(request)
+    else:
+        that_foto = UserMedia.objects.filter(user=that_user)[0]
+        if that_user in this_user.friends.all():
+            bol = 1
+            reviews = Review.objects.filter(author = that_user)
+            reviews = list(map(createReviewU, reviews))
+        else:
+            bol = 0
+            reviews = []
+        if request.method == "GET":
+            return render(request, "base/perfil-publico.html", {
+                "that_user": that_user,
+                "foto": that_foto,
+                "reviews": reviews,
+                "bol": bol
+                })
 
 def editar_perfil(request): # Vista de la página para editar el perfil del usuario
     if request.method == "GET":
@@ -221,7 +225,6 @@ def perfil_actualizado(request): # Vista de la página de perfil actualizado exi
 
     return redirect('perfil/')
 ##
-
 
 ## Vistas de amigos
 @login_required
@@ -273,6 +276,7 @@ def createGameL(game): # Función para crear un objeto de la clase GameL dado un
     gameL = GameL()
     gameL.setAttributes(game)
     return gameL
+
 
 def popular_games(request): # Vista de la página del listado de juegos
     if request.method == "GET":
@@ -358,12 +362,32 @@ def perfilJuego(request): # Vista de la página del perfil de un juego
 def buscar(request): # Vista de la página de resultados de búsqueda
     buscado = request.GET["search"]
     # Filtra el nombre que se buscó en el nombre del juego, del desarrollador, y del género
-    resultados = Game.objects.filter(Q(nombre__icontains=buscado) | Q(desarrollador__icontains=buscado) | Q(genero__icontains=buscado))
+    resultados = Game.objects.filter(Q(nombre__icontains=buscado) | Q(desarrollador__icontains=buscado) )
+    resultados2 = Genre.objects.filter(Q(name__icontains=buscado))
+    def getGame(genre):
+        return genre.game
+
+    def unionU(list1, list2):
+        for e2 in list2:
+            bol = 0
+            for e1 in list1:
+                if e1.id == e2.id:
+                    bol = 1
+                    continue 
+            if bol==0:
+                list1 += [e2]
+        return list1 
+
+    resultados2 = list(map(getGame, resultados2))
+
+    resultados2 = list(map(createGameL, resultados2))
+    resultados = list(map(createGameL, resultados))
+    resultados = unionU(resultados, resultados2)
+    
 
     if request.method == "GET":
         return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
 ##
-
 
 ## Vistas de Reseñas
 class ReviewU:

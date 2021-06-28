@@ -16,25 +16,21 @@
     </div>
 
     <div class="aside">
-        {% for user in that_user %}
-        <h3>{{user.nombre}}</h3>
-        <p>Edad: <b>{{user.edad}}</b></p>
-        <p>Correo: <b>{{user.email}}</b></p>
-        <p>Descripción: <b>{{user.descripcion}}</b></p>
-        {% if user not in this_user.friends.all and user != this_user %}
-            <a href="/send_friend_request/{{user.id}}/">
-                <button class="main-button" type="button"> Agregar amigo </button>
-            </a>
-        {% endif %}
-        {% endfor %}
+      <h3>{{that_user.nombre}}</h3>
+      <p>Edad: <b>{{that_user.edad}}</b></p>
+      <p>Correo: <b>{{that_user.email}}</b></p>
+      <p>Descripción: <b>{{that_user.descripcion}}</b></p>
+      {% ifequal bol 0 %}
+        <a href="/send_friend_request/{{user.id}}/">
+          <button class="main-button" type="button"> Agregar amigo </button>
+        </a>
+      {% endifequal  %}
     </div>
   </div>
-
+  {% ifequal bol 1 %}
   <div class="container">
     <div class="reviews">
-        {% for user in that_user %}
-            <h3>Reviews hechas por {{user}}</h3>
-        {% endfor %}
+      <h3>Reviews hechas por {{that_user}}</h3>
     </div>
   </div>
     {% for review in reviews %}
@@ -58,5 +54,5 @@
         </div>
     </div>
     {% endfor %}
-</div>
+{% endifequal  %}
 {% endblock %}

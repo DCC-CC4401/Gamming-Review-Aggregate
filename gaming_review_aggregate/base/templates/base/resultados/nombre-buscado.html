@@ -2,33 +2,44 @@
 
 {% block head %}
 <link rel="stylesheet" href="../../static/css/popular-games.css">
+<link rel="stylesheet" href="../../static/css/juego.css">
 {% endblock %}
 
 {% block content %}
 <div class="content">
   <div class="container">
-    <div class="popular-games">
-      {% if resultados|length %}
-      <h3> Resultados de la búsqueda: {{buscado}}</h3>
-      <table>
-        <tbody>
-          {% for juego in resultados %}
-          <tr>
-            <td><img class="responsive-img" src="../../static/img/chinita.jpeg" alt=""></td>
-            <td>
-              <h4><a href="/perfil-juego/?nombre={{juego.id}}">{{juego.nombre}}</a> </h4>
-              <p> Desarrollador: <b>{{juego.desarrollador}}</b></p>
-              <p> Géneros :  <b>{{juego.genero}} </b></p>
-              <p> {{juego.descripcion}}</p>
-            </td>
-          </tr>
+    {% if resultados|length %}
+    <h3> Resultados de la búsqueda: {{buscado}}</h3>
+  </div>
+    {% for game in resultados %}
+      <div class="container">
+        <div class="main">
+          <img class="responsive-img" src="../../static/media/{{game.foto}}" alt="">
+        </div>
+
+        <div class="aside">
+          <p>
+          <b><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a></b></p>
+
+          <p>Plataforma:
+          <b>{{game.plataforma}}</b></p>
+
+          <p>Géneros:
+          {% for genre in game.genres %}
+          <b> {{genre.name}}</b>
           {% endfor %}
-        </tbody>
-      </table>
-      {% else %}
-      <h3> No se encontraron resultados para {{buscado}}</h3>
-      {% endif %}
+          </p>
+
+          <p>Puntaje promedio:
+          <b>{{game.score}} </b> de 5.0</p>
+        </div>
+      </div>
+      <hr>
+    {% endfor %}
+
+    {% else %}
+    <h3> No se encontraron resultados para {{buscado}}</h3>
+    {% endif %}
     </div>
   </div>
-</div>
 {% endblock %}
