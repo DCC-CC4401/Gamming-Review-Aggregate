@@ -1,31 +1,39 @@
 {% extends "base/main-template.html" %}
 
 {% block head %}
-<link rel="stylesheet" href="../../static/css/popular-games.css">
+<link rel="stylesheet" href="../../static/css/juego.css">
 {% endblock %}
 
 {% block content %}
 <div class="content">
   <div class="container">
-    <div class="popular-games">
-      <h3> Lista de Juegos Agregados </h3>
-      <table class="table table-striped">
-        <tbody>
-          {% for game in games %}
-            <tr>
-              <td>
-                <p>Nombre: <b>  <a href="/perfil-juego/?nombre={{game.id}}">{{game.nombre}}</a></b></p>
-                <p>Año: <b>{{game.anio}}</b></p>
-                <p>Desarrollador: <b>{{game.desarrollador}}</b></p>
-                <p>Plataforma: <b>{{game.plataforma}}</b></p>
-                <p>Genero: <b>{{game.genero}}</b></p>
-                <p>Descripción: <b>{{game.descripcion}}</b></p>
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+    <h3> Lista de Juegos Agregados </h3>
   </div>
+  <hr>
+  {% for game in games %}
+    <div class="container">
+      <div class="main">
+        <img class="responsive-img" src="../../static/media/{{game.foto}}" alt="">
+ 
+      </div>
+      <div class="aside">
+        <p>
+        <b><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a></b></p>
+
+        <p>Plataforma: 
+        <b>{{game.plataforma}}</b></p>
+
+        <p>Géneros: 
+        {% for genre in game.genres %}
+        <b> {{genre.name}}</b>
+        {% endfor %}
+        </p>
+
+        <p>Puntaje promedio: 
+        <b>{{game.score}} </b> de 5.0</p>
+      </div>
+    </div>
+    <hr>
+  {% endfor %}
 </div>
 {% endblock %}

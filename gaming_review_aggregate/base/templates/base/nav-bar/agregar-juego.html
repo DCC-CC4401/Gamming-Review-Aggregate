@@ -38,9 +38,6 @@
             <div class="entrada">
               <div class="leyenda">Plataforma</div>
               <select id="plat" name="plat">
-                {% for option in plataforms %}
-                <option>  {{option}} </option>
-                {% endfor %}
               </select>
             </div>
 
@@ -56,12 +53,14 @@
               <button type="button" class="secondary-button" onclick="addgenre()" id="add-genre-button" style="display: inline;"> Agregar Género </button>
             </div>
             <script>
+              addPlataforms();
               addgenre();
+
             </script>
 
             <div class="entrada">
               <div class="leyenda">Imagen</div>
-              <input type="file" accept ="image/png, image/jpeg" id="foto" name="foto">
+              <input type="file" required  accept ="image/png, image/jpeg" id="foto" name="foto">
             </div>
 
 

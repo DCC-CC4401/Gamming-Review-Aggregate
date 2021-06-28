@@ -12,7 +12,7 @@ urlpatterns = [
   url(r'^login/validate_password/$', views.validate_password, name='validate_password/'),
   url(r'^login/validate_both_passwords/$', views.validate_both_passwords, name='validate_both_passwords/'),
 
-  path('popular_games', views.popular_games, name='popular_games'),
+  path('listado-juegos', views.popular_games, name='listado-juegos'),
   path('add_game', views.add_game, name='add_game'),
   path('nombre-buscado/', views.buscar, name='nombre-buscado/'),
   path('juego-agregado/', views.juegoAgregado, name='juego-agregado/'),

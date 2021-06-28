@@ -8,10 +8,10 @@
 <div class="content">
     <div class="container">
       <div class="main">
-        <p>Edita tu perfil aquí:</p>
         <h3>Editando perfil de {{user}}</h3>
         <div class="formulario">
-          <form action="/perfil_actualizado/" method="post" >
+          <form action="/perfil_actualizado/" method="post" enctype="multipart/form-data">
+
             {% csrf_token %}
 
             <div class="entrada">
@@ -27,6 +27,11 @@
             <div class="entrada">
               <div class="leyenda" >Descripción del usuario</div>
               <textarea rows="8" cols="40" required id="descripcion_usuario" name="descripcion_usuario" placeholder="Tu descripción"></textarea>
+            </div>
+
+            <div class="entrada">
+              <div class="leyenda">Imagen</div>
+              <input type="file" required  accept ="image/png, image/jpeg" id="foto" name="foto">
             </div>
 
             <!-- Botón de envío-->
