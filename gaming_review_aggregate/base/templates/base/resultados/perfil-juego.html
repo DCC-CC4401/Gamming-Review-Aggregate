@@ -1,10 +1,10 @@
 {% extends "base/main-template.html" %}
 
-{% block head %} 
+{% block head %}
 <link rel="stylesheet" href="../../static/css/juego.css">
 {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="content">
   {% ifequal bol 1%}
   <div class="container">
@@ -20,7 +20,7 @@
       <p>Año de lanzamiento: <b> {{game.anio}}</b></p>
       <p>Desarrollador: <b> {{game.desarrollador}}</b></p>
       <p>Plataforma: <b> {{game.plataforma}}</b></p>
-      <p>Géneros: 
+      <p>Géneros:
       {% for gen in generos %}
       <b> {{gen.name}}  </b>
       {% endfor %}
@@ -46,7 +46,7 @@
     <div class="container">
     <h3> No existe el juego ingresado </h3>
     </div>
- 
+
     {% endifequal %}
 
   </div>

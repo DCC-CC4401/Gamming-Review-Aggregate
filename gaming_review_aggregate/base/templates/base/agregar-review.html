@@ -1,14 +1,14 @@
 {% extends "base/main-template.html" %}
 
-{% block head %} 
+{% block head %}
 <link rel="stylesheet" href="../../static/css/agregar-juego.css">
 {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="content">
     <div class="container">
       <div class="main">
-        <h3>Escribe tu reseña:</h3>
+        <h3>Escribe tu reseña aquí:</h3>
         <div class="formulario">
           <form action="/review_agregada/" method="post" >
             {% csrf_token %}
@@ -23,7 +23,7 @@
             </div>
 
             <div class="entrada">
-              <div class="leyenda" >Puntaje</div>
+              <div class="leyenda" >Puntaje (obligatorio)</div>
               <input type="number" id="quantity" name="score" min="1" max="5">
             </div>
 
@@ -34,7 +34,7 @@
 
             <!-- Botón de envío-->
             <div class="entrada">
-              <button class="main-button" type="submit"> Guardar reseña </button>
+              <button class="main-button" type="submit"> Enviar reseña </button>
             </div>
           </form>
         </div>

@@ -17,16 +17,16 @@
             <td><img class="responsive-img" src="../../static/media/{{game.foto}}" alt=""></td>
             <td>
               <h4><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a> </h4>
-              <p>Plataforma: 
+              <p>Plataforma:
               <b>{{game.plataforma}}</b></p>
 
-              <p>Géneros: 
+              <p>Géneros:
               {% for genre in game.genres %}
               <b> {{genre.name}}</b>
               {% endfor %}
               </p>
 
-              <p>Puntaje promedio: 
+              <p>Puntaje promedio:
               <b>{{game.score}}</b> de 5.0</p>
             </td>
           </tr>
@@ -37,22 +37,20 @@
 
 
     <div class="aside">
-      <h3>Agregar amigos</h3>
+      <h3>Quizás conozcas a:</h3>
       <table class="table table-striped">
         <tbody>
           {% for user in users %}
           {% if not user.is_superuser and user.username != 'Anonimo'%}
           {% if user not in request.user.friends.all and user != request.user %}
           <tr>
-            <td>{{user}}<br><a href="/send_friend_request/{{user.id}}/">send friend request</a></td>
-
+            <td>{{user}}<br><a href="/perfil_publico/?nombre={{user.id}}">Ver Perfil</a></td>
           </tr>
           {% endif %}
           {% endif %}
           {% endfor %}
         </tbody>
       </table>
-
     </div>
   </div>
 </div>

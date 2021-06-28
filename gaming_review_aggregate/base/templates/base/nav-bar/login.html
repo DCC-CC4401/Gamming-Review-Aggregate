@@ -8,7 +8,7 @@
 <div class="content">
   <div class="container">
     <div class="main">
-      <p> ¿Tienes una cuenta? Conéctate con tu cuenta</p>
+      <p> ¿Tienes una cuenta? Conéctate aquí</p>
 
       <!-- ajax sobre el formulario de login -->
       <script>
@@ -22,7 +22,7 @@
             var user = $("input[id=user]").val();   // Guardamos el usuario
             $.ajax({    // AJAX
               url: '/login/validate_user_login/',   // url para el ajax
-              data: {'username': user},   
+              data: {'username': user},
               // Guardamos el input en un json para la funcion validate_user_login en views.py
               dataType: 'json',
               success: function (data) {
@@ -43,7 +43,7 @@
             var passw = $("input[id=passw]").val(); // Guardamos la passw
             $.ajax({    // AJAX
               url: '/login/validate_passw_login/',   // url para el ajax
-              data: {'passw': passw},   
+              data: {'passw': passw},
               // Guardamos el input en un json para la funcion validate_passw_login en views.py
               dataType: 'json',
               success: function (data) {
@@ -66,11 +66,11 @@
           {% csrf_token %}
           <div class="entrada">
             <div class="leyenda" >Usuario</div>
-            <input type="text" id="user" name="user" size=100 placeholder= "Ingrese su usuario">
+            <input type="text" id="user" name="user" size=100 placeholder= "Ingresa tu usuario">
           </div>
           <div class="entrada">
             <div class="leyenda" >Contraseña</div>
-            <input type="password" id="passw" name="passw" size=100 placeholder= "Ingrese su contraseña">
+            <input type="password" id="passw" name="passw" size=100 placeholder= "Ingresa tu contraseña">
           </div>
 
           <!-- Botón de envío de Login -->
@@ -93,7 +93,7 @@
             var new_user = $("input[id=new-user]").val(); // Guardamos la entrada para verificarla
             $.ajax({    // AJAX
               url: '/login/validate_username/',   // url para el ajax
-              data: {'username': new_user},   
+              data: {'username': new_user},
               // Guardamos el input en un json para la función validate_username en views.py
               dataType: 'json',
               success: function (data) {
@@ -116,7 +116,7 @@
             var new_passw1 = $("input[id=new-passw1]").val(); // Guardamos la entrada para verificarla
             $.ajax({    // AJAX
               url: '/login/validate_password/',   // url para el ajax
-              data: {'password': new_passw1},   
+              data: {'password': new_passw1},
               // Guardamos el input en un json para la función validate_password en views.py
               dataType: 'json',
               success: function (data) {
@@ -140,7 +140,7 @@
             var new_passw2 = $("input[id=new-passw2]").val(); // Guardamos la entrada para verificarla
             $.ajax({    // AJAX
               url: '/login/validate_both_passwords/',   // url para el ajax
-              data: {'password1': new_passw1, 'password2': new_passw2},   
+              data: {'password1': new_passw1, 'password2': new_passw2},
               // Guardamos el input en un json para la función validate_both_passwords en views.py
               dataType: 'json',
               success: function (data) {
@@ -165,18 +165,18 @@
           {% csrf_token %}
           <div class="entrada">
             <div class="leyenda" id="new-user-leyend">Nombre de usuario</div>
-            <input type="text" id="new-user" name="new-user" size=100 placeholder= "Ingrese su usuario">
+            <input type="text" id="new-user" name="new-user" size=100 placeholder= "Ingresa un nombre de usuario">
             <div class="leyenda-none" id="new-user-msj"> El nombre de usuario ya existe </div>
           </div>
           <div class="entrada"></div>
           <div class="entrada">
             <div class="leyenda" >Escribe una constraseña</div>
-            <input type="password" id="new-passw1" name="new-passw1" size=100 placeholder= "Ingrese su contraseña">
+            <input type="password" id="new-passw1" name="new-passw1" size=100 placeholder= "Ingresa una contraseña">
             <div class="leyenda-none" id="new-passw1-msj"> La contraseña ingresada no es válida </div>
           </div>
           <div class="entrada">
             <div class="leyenda" >Vuelve a escribir tu contraseña</div>
-            <input type="password" id="new-passw2" name="new-passw2" size=100 placeholder= "Re-ingrese su contraseña">
+            <input type="password" id="new-passw2" name="new-passw2" size=100 placeholder= "Re-ingresa tu contraseña">
             <div class="leyenda-none" id="new-passw2-msj"> La contraseña ingresada no es válida </div>
           </div>
 

@@ -1,0 +1,51 @@
+{% extends "base/main-template.html" %}
+
+{% block head %}
+<link rel="stylesheet" href="../../static/css/juego.css">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+  <div class="container">
+    <div class="main">
+      <img class="responsive-img" src="../../static/img/chinita.jpeg" alt="">
+    </div>
+
+    <div class="aside">
+        {% for user in that_user %}
+        <h3>{{user.nombre}}</h3>
+        <p>Edad: <b>{{user.edad}}</b></p>
+        <p>Correo: <b>{{user.email}}</b></p>
+        <p>Descripción: <b>{{user.descripcion}}</b></p>
+        {% if user not in this_user.friends.all and user != this_user %}
+            <a href="/send_friend_request/{{user.id}}/">
+                <button class="main-button" type="button"> Agregar amigo </button>
+            </a>
+        {% endif %}
+        {% endfor %}
+    </div>
+  </div>
+  <div class="container">
+    <div class="reviews">
+        {% for user in that_user %}
+            <h3>Reviews hechas por {{user}}</h3>
+            {% for review in reviews %}
+                {% if review.author.username == user.username %}
+                <table>
+                    <tr>
+                    <td>Juego: <b>{{review.game.nombre}}</b></td>
+                </tr>
+                <tr>
+                    <td>Puntaje: <b>{{review.score}}</b></td>
+                </tr>
+                <tr>
+                    <td>Reseña: <b>{{review.body}}</b></td>
+                </tr>
+                </table>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

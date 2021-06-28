@@ -14,22 +14,22 @@
     <div class="container">
       <div class="main">
         <img class="responsive-img" src="../../static/media/{{game.foto}}" alt="">
- 
+
       </div>
       <div class="aside">
         <p>
         <b><a href="/perfil-juego/?nombre={{game.id}}">{{game.name}}</a></b></p>
 
-        <p>Plataforma: 
+        <p>Plataforma:
         <b>{{game.plataforma}}</b></p>
 
-        <p>Géneros: 
+        <p>Géneros:
         {% for genre in game.genres %}
         <b> {{genre.name}}</b>
         {% endfor %}
         </p>
 
-        <p>Puntaje promedio: 
+        <p>Puntaje promedio:
         <b>{{game.score}} </b> de 5.0</p>
       </div>
     </div>

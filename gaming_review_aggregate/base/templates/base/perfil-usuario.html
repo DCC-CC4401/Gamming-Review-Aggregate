@@ -36,7 +36,7 @@
   </div>
 
   <div class="container">
-    <div class="friend_requests"> 
+    <div class="friend_requests">
       {% for friend_request in friend_requests %}
 
       <div class="request">
@@ -56,7 +56,7 @@
       <h3>Mis amigos</h3>
       {% for friend in user.friends.all %}
       <tr>
-        <td>{{friend.nombre}}</td>
+        <td><b>  <a href="/perfil_publico/?nombre={{friend.id}}">{{friend.nombre}}</a></b></td>
       </tr>
       {% endfor %}
     </div>
@@ -76,16 +76,15 @@
         <div class="aside">
           <p><b><a href="/perfil-juego/?nombre={{review.id_game}}">{{review.name_game}}</a></b></p>
 
-          <p>Plataforma: 
+          <p>Plataforma:
           <b>{{review.plataforma_game}}</b></p>
 
-          <p>Puntaje: 
+          <p>Puntaje:
           <b>{{review.review_score}}</b></p>
 
-          <p>Reseña: 
+          <p>Reseña:
           <b>{{review.review_des}}</b></p>
- 
- 
+
         </div>
     </div>
     {% endfor %}

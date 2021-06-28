@@ -9,194 +9,48 @@ import hashlib
 from os import remove
 
 
-games = Game.objects.all()
-users = User.objects.all()
-reviews = Review.objects.all()
-friend_requests = Friend_Request.objects.all()
-genre = Genre.objects.all()
-fotos = GameMedia.objects.all()
+games = Game.objects.all() # Todos los juegos de la base de datos
+users = User.objects.all() # Todos los usuarios de la base de datos
+reviews = Review.objects.all() # Todas las reseñas de la base de datos
+friend_requests = Friend_Request.objects.all() # Todas las solicitudes de amistad
+genre = Genre.objects.all() # Todos los géneros de la base de datos
+fotos = GameMedia.objects.all() # Todas las fotos (de juegos) de la base de datos
 
-# Clase que representa un objeto que contiene la información de un juego
-# que se va a mostrar en el listado de juegos
-class GameL:
-    def __init__(self):
-        self.id = 0
-        self.name = 0
-        self.plataforma = 0
-        self.genres = 0
-        self.score = 0
-        self.foto = 0
 
-    def setAttributes(self, game):
-        self.id = game.id
-        self.name = game.nombre
-        self.plataforma = game.plataforma
-        self.genres = Genre.objects.filter(game=game)
-        self.score = game.promedio
-        self.foto = GameMedia.objects.filter(game=game)[0].path
-
-# Función para crear un objeto de la clase GameL dado un juego
-def createGameL(game):
-    gameL = GameL()
-    gameL.setAttributes(game)
-    return gameL
-
-# Clase que representa un objeto que contiene la información de una review
-# que se va a mostrar en el listado de reviews de un usuario 
-class ReviewU:
-    def __init__(self):
-        self.id_game = 0
-        self.name_game = 0
-        self.plataforma_game = 0
-        self.foto= 0
-        self.review_score = 0
-        self.review_des = 0
-
-    def setAttributes(self, review):
-        game = review.game
-        self.id_game = game.id
-        self.name_game = game.nombre
-        self.plataforma_game = game.plataforma
-        self.foto = GameMedia.objects.filter(game=game)[0].path
-        self.review_score = review.score
-        self.review_des= review.body
-
-# Función para crear un objeto de la clase ReviewU dado una review
-def createReviewU(review):
-    reviewU= ReviewU()
-    reviewU.setAttributes(review)
-    return reviewU 
-
-def home(request): #the homepage view
-    top_games = Game.objects.all().order_by('-promedio')[:5]
-    game_list = list(map(createGameL, top_games))
-
+def home(request): # Vista de la página de home
+    top_games = Game.objects.filter(promedio__gte=2.5).order_by('-promedio') # Filtra los mejores juegos
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": game_list, "users": users})
+        return render(request, "base/nav-bar/index.html", { "games": top_games, "users": users})
 
-def user_login(request): #the login view
+
+## Vistas de login
+def user_login(request): # Vista de la página de login
     if request.method == "GET":
        return render(request, "base/nav-bar/login.html")
 
-    elif request.method == 'POST': #Si estamos recibiendo el form de registro
-        #Tomar los elementos del formulario que vienen en request.POST
+    elif request.method == 'POST': # Si estamos recibiendo el form de registro
+        # Tomar los elementos del formulario que vienen en request.POST
         username = request.POST['user']
         contraseña = request.POST['passw']
 
-        #Autenticar al usuario
+        # Autenticar al usuario
         user = authenticate(username=username, nombre=username, password=contraseña)
 
         if user is not None:
-            #Redireccionar la página /home
-            #login(request, user)
+            # Redireccionar la página /home
             if user.is_active:
+                # Guardar los datos de usuario
                 login(request,user)
                 user.last_login = timezone.now()
                 user.save(update_fields=['last_login'])
                 return HttpResponseRedirect('/home')
             else:
+                # Esto no debiera pasar
                 return HttpResponseRedirect('/add_game')
         else:
+            # Redirigir a la misma página
             print("invalid login details " + username + " " + contraseña)
             return HttpResponseRedirect('/login')
-
-
-def user_logout(request):
-    logout(request)
-    # Redirect back to index page.
-    return render(request, "base/resultados/sesion-cerrada.html")
-
-
-def popular_games(request): # the popular games view
-    if request.method == "GET":
-
-        # armar una lista que contienen objetos con la información necesaria
-        # para mostrar listado de todos los juegos
-        game_list = list(map(createGameL, games))
-
-        return render(request, "base/nav-bar/popular-games.html", {"games": game_list })
-
-
-def add_game(request): #the add game form view
-    if request.method == "GET":
-        return render(request, "base/nav-bar/agregar-juego.html")
-
-
-def buscar(request):
-    buscado = request.GET["search"]
-    resultados = Game.objects.filter(Q(nombre__icontains=buscado) | Q(desarrollador__icontains=buscado) | Q(genero__icontains=buscado))
-
-    if request.method == "GET":
-        #Cuando se haga la consulta respecto al nombre buscado, hay que agregar los resultados en el diccionario, tipo:
-        #return render(request, "base/buscar-nombre.html", {"buscado": nombre, "resultados": resultados})
-
-        return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
-
-
-def juegoAgregado(request):
-    nombre = request.POST["nombre"]
-    anio = request.POST["anio"]
-    descripcion = request.POST["descripcion"]
-    desarrollador = request.POST["dev"]
-    plat = request.POST["plat"]
-    gen = request.POST.getlist("gen")
-    foto = request.FILES["foto"]
-
-    # Acá hay que crear un código que, dado los datos anteriores, agregue a la base de datos el juego:
-    game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat)
-    games.update()
-
-    # Se agrega géneros a la base de datos
-    for g in gen:
-        add_g = Genre.objects.create(name = g, game= game)
-
-    # Se guarda la imagen con un nombre 
-    total_images = GameMedia.objects.all().count()
-    hash_archivo = str(total_images) + hashlib.sha256(
-            foto.name.encode()).hexdigest()[0:30]
-    file_path = './base/static/media/' + hash_archivo
-    with open(file_path, 'wb') as image: 
-        image.write(foto.file.read())
-
-    # Se guarda la foto en la base de datos
-    foto = GameMedia.objects.create(nombre = foto.name, path = hash_archivo, game = game)
-
-    dic = {"nombre": nombre,
-            "anio": anio,
-            "descripcion": descripcion,
-            "desarrollador": desarrollador,
-            "plataforma": plat,
-            "generos": gen,
-            "foto": hash_archivo 
-            }
-
-    if request.method == "POST":
-        return render(request, "base/resultados/juego-agregado.html", dic)
-
-
-def perfilJuego(request):
-    if request.method == "GET":
-        nombre = request.GET["nombre"]
-        resultado = Game.objects.filter(id=nombre)
-        if (len(resultado)==0):
-            return render(request, "base/resultados/perfil-juego.html", {"bol": 0})
-        reviews = Review.objects.filter(game=nombre)
-        generos = Genre.objects.filter(game=nombre)
-        foto = GameMedia.objects.filter(game=nombre)
-        try:
-            prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
-        except:
-            prom = 0.0
-        resultado.update(promedio=prom)
- 
-        return render(request, "base/resultados/perfil-juego.html", {
-            "game": resultado[0], 
-            "reviews": reviews,
-            "generos": generos,
-            "foto": foto[0],
-            "bol": 1,
-            "prom": prom}
-            )
 
 def validate_user_login(request): # Validador del nombre de usuario
     username = request.GET.get('username', None)    # Rescatamos 'username' del json entregado
@@ -265,34 +119,42 @@ def validate_user(request): # Validador del usuario
     }
     return JsonResponse(data)
 
-def cuentaCreada(request):
+def cuentaCreada(request): # Vista de la página de cuenta creada exitosamente
     new_user = request.POST["new-user"]
     new_password1 = request.POST["new-passw1"]
     new_password2 = request.POST["new-passw2"]
 
-    #Acá hay que crear un código que, dado los datos anteriores, agregue a la base la nueva cuenta:
-    #También se puede agregar acá el formato de los datos (usuario y contraseña) y su validación
+    # Se agrega el usuario a la base de datos
     user = User.objects.create_user(username=new_user, nombre=new_user, password=new_password1)
     users.update()
-
-    user_media = UserMedia.objects.create(nombre="no",path="no",user=user)
-
 
     if request.method == "POST":
         user.last_login = timezone.now()
         user.save(update_fields=['last_login'])
         return render(request, "base/resultados/cuenta-agregada.html", {"user": new_user})
 
-def perfil(request): #the homepage view
-    this_user = request.user
-    this_friend_requests = Friend_Request.objects.filter(to_user=this_user)
-    foto = UserMedia.objects.filter(user=this_user)[0]
-    reviews = Review.objects.filter(author=this_user)
+def user_logout(request): # Vista de la página de logout
+    logout(request)
+    return render(request, "base/resultados/sesion-cerrada.html")
+##
+
+
+## Vistas de perfiles
+def perfil(request): # Vista de la página del perfil del usuario activo
+    this_user = request.user # Este usuario
+    this_friend_requests = Friend_Request.objects.filter(to_user=this_user) # Filtra las solicitudes de amistad pendientes del usuario
+    try:
+        foto = UserMedia.objects.filter(user=this_user)[0] # Filtra la foto de este usuario
+    except:
+        foto = UserMedia.objects.filter(path="../../static/img/chinita.jpeg") # Arreglar
+
+    reviews = Review.objects.filter(author=this_user) # Filtra las reseñas hechas por el usuario
     reviews = list(map(createReviewU, reviews))
+
     if request.method == "GET":
         return render(request, "base/perfil-usuario.html", {
-            "reviews": reviews, 
-            "friend_requests": this_friend_requests, 
+            "reviews": reviews,
+            "friend_requests": this_friend_requests,
             "user": request.user,
             "foto": foto,
             "users": users})
@@ -300,11 +162,20 @@ def perfil(request): #the homepage view
     elif request.method == "POST":
         return render(request, "base/perfil-usuario.html", {"reviews": reviews, "friend_requests": this_friend_requests, "user": request.user, "users": users})
 
-def editar_perfil(request): #the homepage view
+def perfilPublico(request): # Vista de la página del perfil de un usuario en modo público
+    user_search = request.GET["nombre"]
+    that_user = users.filter(id=user_search) # Filtra entre los usuarios para obtener el usuario deseado
+    if request.method == "GET":
+        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user,"users": users})
+
+    elif request.method == "POST":
+        return render(request, "base/perfil-publico.html", {"reviews": reviews, "this_user": request.user, "that_user": that_user, "users": users})
+
+def editar_perfil(request): # Vista de la página para editar el perfil del usuario
     if request.method == "GET":
         return render(request, "base/editar-perfil.html")
 
-def perfil_actualizado(request):
+def perfil_actualizado(request): # Vista de la página de perfil actualizado exitosamente
     edit_edad = request.POST["edad"]
     edit_correo = request.POST["correo"]
     edit_descripcion_usuario = request.POST["descripcion_usuario"]
@@ -314,16 +185,16 @@ def perfil_actualizado(request):
     usuario.edad = edit_edad
     usuario.email = edit_correo
     usuario.descripcion = edit_descripcion_usuario
-    usuario.save(update_fields=["edad","email","descripcion"])
+    usuario.save(update_fields=["edad","email","descripcion"]) # Actualiza la información del usuario
 
     user_media = UserMedia.objects.filter(user=usuario)[0]
 
-    # Se guarda la imagen con un nombre 
+    # Se guarda la imagen con un nombre
     foto_name = foto.name
     hash_archivo = str(user_media.id) + hashlib.sha256(
             foto_name.encode()).hexdigest()[0:30]
     file_path = './base/static/user-media/' + hash_archivo
-    with open(file_path, 'wb') as image: 
+    with open(file_path, 'wb') as image:
         image.write(foto.file.read())
 
     user_media_path = user_media.path
@@ -335,38 +206,12 @@ def perfil_actualizado(request):
     user_media.save(update_fields=["nombre","path"])
 
     return redirect('perfil/')
+##
 
-def add_review(request): #the add game form view
-    if request.method == "GET":
-        return render(request, "base/agregar-review.html", {"users" : users, "games": games})
 
-def review_agregada(request):
-    autor = request.user
-    juego = request.POST["game"]
-    puntaje = request.POST["score"]
-    review = request.POST["game_review"]
-
-    if request.user.is_authenticated:
-        autor_user = User.objects.get(username=autor)
-    else:
-        autor_user, created = User.objects.get_or_create(username="Anonimo", nombre = "Anonimo", password = "nada")
-        if created:
-            autor_user.save()
-
-    juego_obj = Game.objects.get(nombre=juego)
-    review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review)
-    reviews.update()
-
-    game_reviews = reviews.filter(game=juego_obj)
-    prom = round(list(game_reviews.aggregate(Avg('score')).values())[0],1)
-    thegame = games.filter(nombre=juego)
-    thegame.update(promedio=prom)
-    if request.method == "POST":
-        review.save()
-        return render(request, "base/resultados/review-agregada.html", {"user": autor})
-
+## Vistas de amigos
 @login_required
-def send_friend_request(request, userID):
+def send_friend_request(request, userID): # Vista para mandar una nueva solicitud de amistad
     from_user = request.user
     to_user = User.objects.get(id=userID)
     friend_request, created = Friend_Request.objects.get_or_create(from_user=from_user, to_user=to_user)
@@ -376,7 +221,7 @@ def send_friend_request(request, userID):
         return HttpResponse('friend request was already sent')
 
 @login_required
-def accept_friend_request(request, requestID):
+def accept_friend_request(request, requestID): # Vista para aceptar una solicitud de amistad pendiente
     friend_request = Friend_Request.objects.get(id=requestID)
     if friend_request.to_user == request.user:
         friend_request.to_user.friends.add(friend_request.from_user)
@@ -385,3 +230,179 @@ def accept_friend_request(request, requestID):
         return HttpResponse('friend request accepted')
     else:
         return HttpResponse('friend request not accepted')
+##
+
+
+## Vistas de juegos
+class GameL:
+    # Clase que representa un objeto que contiene la información de un juego
+    # que se va a mostrar en el listado de juegos
+    def __init__(self):
+        self.id = 0
+        self.name = 0
+        self.plataforma = 0
+        self.genres = 0
+        self.score = 0
+        self.foto = 0
+
+    def setAttributes(self, game):
+        self.id = game.id
+        self.name = game.nombre
+        self.plataforma = game.plataforma
+        self.genres = Genre.objects.filter(game=game)
+        self.score = game.promedio
+        self.foto = GameMedia.objects.filter(game=game)[0].path
+
+def createGameL(game): # Función para crear un objeto de la clase GameL dado un juego
+    gameL = GameL()
+    gameL.setAttributes(game)
+    return gameL
+
+def popular_games(request): # Vista de la página del listado de juegos
+    if request.method == "GET":
+        # armar una lista que contienen objetos con la información necesaria
+        # para mostrar listado de todos los juegos
+        game_list = list(map(createGameL, games))
+
+        return render(request, "base/nav-bar/popular-games.html", {"games": game_list})
+
+def add_game(request): # Vista de la página de agregar nuevo juego
+    if request.method == "GET":
+        return render(request, "base/nav-bar/agregar-juego.html")
+
+def juegoAgregado(request): # Vista de la página de juego agregado exitosamente
+    nombre = request.POST["nombre"]
+    anio = request.POST["anio"]
+    descripcion = request.POST["descripcion"]
+    desarrollador = request.POST["dev"]
+    plat = request.POST["plat"]
+    gen = request.POST.getlist("gen")
+    foto = request.FILES["foto"]
+
+    # Agrega el nuevo juego a la base de datos
+    game = Game.objects.create(nombre=nombre, anio=anio, descripcion=descripcion, desarrollador=desarrollador, plataforma=plat, genero=gen)
+    games.update()
+
+    # Se agregan sus géneros a la base de datos
+    for g in gen:
+        add_g = Genre.objects.create(name = g, game= game)
+
+    # Se guarda la imagen con un nombre
+    total_images = GameMedia.objects.all().count()
+    hash_archivo = str(total_images) + hashlib.sha256(
+            foto.name.encode()).hexdigest()[0:30]
+    file_path = './base/static/media/' + hash_archivo
+    with open(file_path, 'wb') as image:
+        image.write(foto.file.read())
+
+    # Se guarda la foto en la base de datos
+    foto = GameMedia.objects.create(nombre = foto.name, path = hash_archivo, game = game)
+
+    # Registra los datos para mostrarlos
+    dic = {"nombre": nombre,
+            "anio": anio,
+            "descripcion": descripcion,
+            "desarrollador": desarrollador,
+            "plataforma": plat,
+            "generos": gen,
+            "foto": hash_archivo
+            }
+
+    if request.method == "POST":
+        return render(request, "base/resultados/juego-agregado.html", dic)
+
+def perfilJuego(request): # Vista de la página del perfil de un juego
+    if request.method == "GET":
+        nombre = request.GET["nombre"]
+        resultado = Game.objects.filter(id=nombre)
+        if (len(resultado)==0):
+            return render(request, "base/resultados/perfil-juego.html", {"bol": 0})
+
+        reviews = Review.objects.filter(game=nombre)
+        generos = Genre.objects.filter(game=nombre)
+        foto = GameMedia.objects.filter(game=nombre)
+
+        # Actualiza el promedio actual del juego según las reseñas
+        try:
+            prom = round(list(reviews.aggregate(Avg('score')).values())[0],1)
+        except:
+            # En caso de que no haya recibido reseñas todavía, muestra 0
+            prom = 0.0
+        resultado.update(promedio=prom) # Actualiza el promedio en los datos del juego
+
+        return render(request, "base/resultados/perfil-juego.html", {
+            "game": resultado[0],
+            "reviews": reviews,
+            "generos": generos,
+            "foto": foto[0],
+            "bol": 1,
+            "prom": prom}
+            )
+
+def buscar(request): # Vista de la página de resultados de búsqueda
+    buscado = request.GET["search"]
+    # Filtra el nombre que se buscó en el nombre del juego, del desarrollador, y del género
+    resultados = Game.objects.filter(Q(nombre__icontains=buscado) | Q(desarrollador__icontains=buscado) | Q(genero__icontains=buscado))
+
+    if request.method == "GET":
+        return render(request, "base/resultados/nombre-buscado.html", {"buscado": buscado, "resultados": resultados})
+##
+
+
+## Vistas de Reseñas
+class ReviewU:
+    # Clase que representa un objeto que contiene la información de una review
+    # que se va a mostrar en el listado de reviews de un usuario
+    def __init__(self):
+        self.id_game = 0
+        self.name_game = 0
+        self.plataforma_game = 0
+        self.foto= 0
+        self.review_score = 0
+        self.review_des = 0
+
+    def setAttributes(self, review):
+        game = review.game
+        self.id_game = game.id
+        self.name_game = game.nombre
+        self.plataforma_game = game.plataforma
+        self.foto = GameMedia.objects.filter(game=game)[0].path
+        self.review_score = review.score
+        self.review_des= review.body
+
+def createReviewU(review): # Función para crear un objeto de la clase ReviewU dado una review
+    reviewU= ReviewU()
+    reviewU.setAttributes(review)
+    return reviewU
+
+def add_review(request): # Vista de la página para agregar reseñas
+    if request.method == "GET":
+        return render(request, "base/agregar-review.html", {"users" : users, "games": games})
+
+def review_agregada(request): # Vista de la página de reseña agregada exitosamente
+    autor = request.user
+    juego = request.POST["game"]
+    puntaje = request.POST["score"]
+    review = request.POST["game_review"]
+
+    if request.user.is_authenticated:
+        # Deja al usuario activo como autor
+        autor_user = User.objects.get(username=autor)
+    else:
+        # Deja un usuario anónimo como autor
+        autor_user, created = User.objects.get_or_create(username="Anonimo", nombre = "Anonimo", password = "nada")
+        if created:
+            autor_user.save()
+
+    juego_obj = Game.objects.get(nombre=juego)
+    review = Review.objects.create(author=autor_user, game=juego_obj, score=puntaje, body=review) # Crea la reseña
+    reviews.update() # Actualiza las reseñas en la base de datos
+
+    game_reviews = reviews.filter(game=juego_obj)
+    prom = round(list(game_reviews.aggregate(Avg('score')).values())[0],1) # Calcula el puntaje promedio
+    thegame = games.filter(nombre=juego)
+    thegame.update(promedio=prom) # Actualiza el puntaje promedio
+    if request.method == "POST":
+        review.save() # Guarda la reseña
+        return render(request, "base/resultados/review-agregada.html", {"user": autor})
+##

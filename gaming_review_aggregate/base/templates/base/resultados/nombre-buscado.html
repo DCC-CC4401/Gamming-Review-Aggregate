@@ -1,15 +1,15 @@
 {% extends "base/main-template.html" %}
 
-{% block head %} 
+{% block head %}
 <link rel="stylesheet" href="../../static/css/popular-games.css">
 {% endblock %}
 
-{% block content %} 
+{% block content %}
 <div class="content">
   <div class="container">
     <div class="popular-games">
       {% if resultados|length %}
-      <h3> Resultados búsqueda: {{buscado}}</h3>
+      <h3> Resultados de la búsqueda: {{buscado}}</h3>
       <table>
         <tbody>
           {% for juego in resultados %}
