@@ -37,7 +37,13 @@
         {% for review in reviews %}
 
         <div class="autor">
-          Autor: <b><a href="/perfil_publico/?nombre={{review.author.id}}">{{review.author.nombre}}</a></b>
+          {% ifequal review.author.nombre "Anonimo" %}
+          Autor: <b>{{review.author.nombre}}</b>
+          {% else %}
+          Autor: <b><a href="/perfil_publico/?nombre={{review.author.id}}">{{review.author.nombre}}</b></a>
+          {% endifequal %}
+
+
         </div>
 
         <div class="puntaje">
