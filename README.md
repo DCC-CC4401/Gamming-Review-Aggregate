@@ -35,8 +35,6 @@ python manage.py runserver
 
 ## Branches
 - master
-- estilos
-- formulario
 
 ## Authors
 - **Alexander Walmsley** - [AlexanderWalmsley](https://github.com/AlexanderWalmsley)
