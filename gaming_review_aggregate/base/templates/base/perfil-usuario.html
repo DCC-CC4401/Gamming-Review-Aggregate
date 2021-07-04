@@ -38,33 +38,36 @@
   <div class="container">
     <div class="friend_requests">
       {% for friend_request in friend_requests %}
-
       <div class="request">
-        {{friend_request.from_user.nombre}} <br>
-
+        <a href="/perfil_publico/?nombre={{friend_request.from_user.id}}">
+        {{friend_request.from_user.nombre}}<br>
+        </a>
         <a href="/accept_friend_request/{{friend_request.id}}/">
         <button class="friend_request-button" type="button"> Agregar amigo</button>
-      </a>
+        </a>
       </div>
       {% endfor %}
-
     </div>
   </div>
 
   <div class="container">
     <div class="friends">
       <h3>Mis amigos</h3>
-      {% for friend in user.friends.all %}
-      <tr>
-        <td><b>  <a href="/perfil_publico/?nombre={{friend.id}}">{{friend.nombre}}</a></b></td>
-      </tr>
+      <div class="menu">
+        <ul>
+          {% for friend in user.friends.all %}
+          <li>
+            <b><a href="/perfil_publico/?nombre={{friend.id}}">{{friend.nombre}}</a></b>
+          </li>
       {% endfor %}
+        </ul>
+      </div>
     </div>
   </div>
 
   <div class="container">
     <div class="reviews">
-      <h3>Reviews hechas por {{user}}</h3>
+      <h3>Mis Reviews<h3>
     </div>
   </div>
 

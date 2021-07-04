@@ -20,12 +20,28 @@
   max-width: 600px;
   min-width: 160px;
 }
-
 .reviews{
-  width: 100%
+  width: 100%;
 }
+
 hr{
   border: 1px dashed rgba(100,100,200, 0.4);
+}
+.autor {
+  margin-left: 10%;
+  display: inline-block;
+  width: 25%;
+  vertical-align: top;
+}
+
+.puntaje {
+  float: right;
+  margin-right: 10%
+}
+.resenia{
+  margin-left: 10%;
+  margin-top: 1em;
+  margin-right: 10%
 }
 
 @media (max-width: 830px){

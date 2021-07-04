@@ -18,10 +18,30 @@ fotos = GameMedia.objects.all() # Todas las fotos (de juegos) de la base de dato
 
 
 def home(request): # Vista de la página de home
+    users = User.objects.all() # Todos los usuarios de la base de datos
     top_games = games.order_by('-promedio')[:5] # Filtra los mejores juegos
     game_list = list(map(createGameL, top_games)) # Mapea la lista de mejores juegos
+
+    user = request.user
+    users_r = []
+
+    if not (user.is_anonymous):
+        users_raw = User.objects.exclude(nombre=user)
+        friend_request = Friend_Request.objects.all()
+        for u in users_raw:
+            bol = 0
+            for fr in friend_request:
+                a = fr.to_user == user and fr.from_user == u
+                b = fr.to_user == u and fr.from_user == user
+                if a or b:
+                    bol = 1
+                    break
+            c = u in user.friends.all()
+            if bol == 0 and (not c):
+                users_r += [u]
+
     if request.method == "GET":
-        return render(request, "base/nav-bar/index.html", { "games": game_list, "users": users})
+        return render(request, "base/nav-bar/index.html", { "games": game_list, "users": users_r})
 
 
 ## Vistas de login
@@ -172,20 +192,37 @@ def perfilPublico(request): # Vista de la página del perfil de un usuario en mo
 
     if(that_user.id == this_user.id):
         return perfil(request)
+    elif (this_user.is_anonymous):
+        if request.method == "GET":
+            that_foto = UserMedia.objects.filter(user=that_user)[0]
+            return render(request, "base/perfil-publico.html", {
+                "that_user": that_user,
+                "foto": that_foto,
+                "reviews": [],
+                "friend_request": [],
+                "bol": -1
+                })
     else:
+        fr = Friend_Request.objects.filter(Q(from_user=that_user)&Q(to_user=this_user))
+        fr2 = Friend_Request.objects.filter(Q(from_user=this_user)&Q(to_user=that_user))
         that_foto = UserMedia.objects.filter(user=that_user)[0]
         if that_user in this_user.friends.all():
             bol = 1
             reviews = Review.objects.filter(author = that_user)
             reviews = list(map(createReviewU, reviews))
         else:
-            bol = 0
+            bol = len(fr)*2
             reviews = []
+            if bol > 0:
+                fr = fr[0]
+            else:
+                bol = len(fr2)*3
         if request.method == "GET":
             return render(request, "base/perfil-publico.html", {
                 "that_user": that_user,
                 "foto": that_foto,
                 "reviews": reviews,
+                "friend_request": fr,
                 "bol": bol
                 })
 
@@ -282,9 +319,11 @@ def popular_games(request): # Vista de la página del listado de juegos
     if request.method == "GET":
         # armar una lista que contienen objetos con la información necesaria
         # para mostrar listado de todos los juegos
+        games = Game.objects.all() # Todos los juegos de la base de datos
         game_list = list(map(createGameL, games))
 
         return render(request, "base/nav-bar/popular-games.html", {"games": game_list})
+
 
 def add_game(request): # Vista de la página de agregar nuevo juego
     if request.method == "GET":

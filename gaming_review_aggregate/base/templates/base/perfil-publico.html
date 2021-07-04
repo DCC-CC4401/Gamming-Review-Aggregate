@@ -21,9 +21,18 @@
       <p>Correo: <b>{{that_user.email}}</b></p>
       <p>Descripción: <b>{{that_user.descripcion}}</b></p>
       {% ifequal bol 0 %}
-        <a href="/send_friend_request/{{user.id}}/">
+        <a href="/send_friend_request/{{that_user.id}}/">
           <button class="main-button" type="button"> Agregar amigo </button>
         </a>
+      {% endifequal  %}
+      {% ifequal bol 2 %}
+        <a href="/accept_friend_request/{{friend_request.id}}/">
+          <button class="main-button" type="button"> Aceptar solicitud de amistad</button>
+        </a>
+      {% endifequal  %}
+      {% ifequal bol 3 %}
+      <button class="main-button" type="button">Solicitud de amistad enviada</button>
+ 
       {% endifequal  %}
     </div>
   </div>

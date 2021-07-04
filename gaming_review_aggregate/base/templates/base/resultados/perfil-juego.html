@@ -29,15 +29,26 @@
       <p>Puntaje promedio: <b> {{prom}} de 5.0</b></p>
     </div>
   </div>
-  <hr>
 
   <div class="container">
     <div class="reviews">
       <h3>Reseñas</h3>
+      <hr>
         {% for review in reviews %}
-        <p> Autor: {{review.author.nombre}}</p>
-        <p> Puntaje: {{review.score}}</p>
-        <p> Reseña:  {{review.body}}</p>
+
+        <div class="autor">
+          Autor: <b><a href="/perfil_publico/?nombre={{review.author.id}}">{{review.author.nombre}}</a></b>
+        </div>
+
+        <div class="puntaje">
+        
+          Puntaje: <b>{{review.score}}</b> de 5.0
+        </div>
+
+        <div class="resenia">
+          Reseña: <b> {{review.body}}</b>
+        </div>
+
         <hr>
         {% endfor %}
     </div>
@@ -46,7 +57,6 @@
     <div class="container">
     <h3> No existe el juego ingresado </h3>
     </div>
-
     {% endifequal %}
 
   </div>
